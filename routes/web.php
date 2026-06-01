@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Pengaduan;
 
 // Ubah yang tadinya 'welcome' menjadi 'index'
 Route::get('/', function () {
@@ -22,4 +23,9 @@ Route::get('/create', function () {
 
 Route::get('/show/{id}', function ($id) {
     return view('show', ['id' => $id]);
+});
+
+Route::get('/show/{id}', function ($id) {
+    $pengaduan = Pengaduan::with(['user', 'desa', 'rtrw'])->findOrFail($id);
+    return view('show', compact('pengaduan'));
 });

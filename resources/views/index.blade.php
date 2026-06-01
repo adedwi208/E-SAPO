@@ -1169,134 +1169,107 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const container = document.getElementById('container-pengaduan');
-        const statTotal = document.getElementById('stat-total');
-        const statPending = document.getElementById('stat-pending');
-        const statProses = document.getElementById('stat-proses');
-        const statSelesai = document.getElementById('stat-selesai');
+document.addEventListener('DOMContentLoaded', function () {
+    const container   = document.getElementById('container-pengaduan');
+    const statTotal   = document.getElementById('stat-total');
+    const statPending = document.getElementById('stat-pending');
+    const statProses  = document.getElementById('stat-proses');
+    const statSelesai = document.getElementById('stat-selesai');
 
-        const safeText = (value, fallback = '-') => {
-            if (value === null || value === undefined || value === '') return fallback;
-            return String(value);
-        };
+    const safeText = (value, fallback = '-') => {
+        if (value === null || value === undefined || value === '') return fallback;
+        return String(value);
+    };
 
-        const getStatusClass = (status) => {
-            if (status === 'proses') return 'proses';
-            if (status === 'selesai') return 'selesai';
-            return 'pending';
-        };
+    const getStatusClass = (status) => {
+        if (status === 'proses')  return 'proses';
+        if (status === 'selesai') return 'selesai';
+        return 'pending';
+    };
 
-        fetch('/api/pengaduan', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            container.innerHTML = '';
+    // Fetch stats dan list pengaduan secara paralel
+    Promise.all([
+        fetch('/api/pengaduan/stats', { headers: { 'Accept': 'application/json' } }).then(r => r.json()),
+        fetch('/api/pengaduan',       { headers: { 'Accept': 'application/json' } }).then(r => r.json()),
+    ])
+    .then(([stats, data]) => {
+        // Isi stats dari endpoint dedicated — akurat meski data dipaginasi nanti
+        statTotal.innerText   = stats.total   ?? 0;
+        statPending.innerText = stats.pending ?? 0;
+        statProses.innerText  = stats.proses  ?? 0;
+        statSelesai.innerText = stats.selesai ?? 0;
 
-            if (!Array.isArray(data) || data.length === 0) {
-                container.innerHTML = `
-                    <div class="sapo-empty">
-                        <div>
-                            <div class="sapo-empty-icon">🍃</div>
-                            <h3>Kondisi Lingkungan Bersih</h3>
-                            <p>
-                                Belum ada aduan penumpukan sampah liar yang masuk.
-                                Mari jaga lingkungan sekitar agar tetap bersih dan nyaman.
-                            </p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
+        container.innerHTML = '';
 
-            statTotal.innerText = data.length;
-            statPending.innerText = data.filter(i => i.status === 'pending').length;
-            statProses.innerText = data.filter(i => i.status === 'proses').length;
-            statSelesai.innerText = data.filter(i => i.status === 'selesai').length;
-
-            data.forEach(item => {
-                const statusClass = getStatusClass(item.status);
-                const imgUrl = item.foto
-                    ? `/storage/${item.foto}`
-                    : 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?q=80&w=900';
-
-                const userName = item.user ? safeText(item.user.name, 'Masyarakat') : 'Masyarakat';
-                const initial = userName.charAt(0).toUpperCase();
-
-                const desaName = item.desa
-                    ? safeText(item.desa.nama_desa || item.desa.name, 'Sektor Umum')
-                    : 'Sektor Umum';
-
-                const rt = item.rtrw ? safeText(item.rtrw.rt) : '-';
-                const rw = item.rtrw ? safeText(item.rtrw.rw) : '-';
-
-                const card = `
-                    <article class="sapo-report-card">
-                        <div class="sapo-report-image">
-                            <img src="${imgUrl}" alt="Bukti Laporan Lapangan">
-                            <span class="sapo-status ${statusClass}">
-                                ${safeText(item.status, 'pending')}
-                            </span>
-                        </div>
-
-                        <div class="sapo-report-body">
-                            <div class="sapo-location">
-                                <span>📍</span>
-                                <span>${desaName} • RT ${rt}/RW ${rw}</span>
-                            </div>
-
-                            <h3 class="sapo-report-title">
-                                ${safeText(item.lokasi_spesifik, 'Lokasi belum tersedia')}
-                            </h3>
-
-                            <p class="sapo-report-desc">
-                                ${safeText(item.deskripsi, 'Tidak ada deskripsi tambahan untuk laporan ini.')}
-                            </p>
-
-                            <div class="sapo-report-footer">
-                                <div class="sapo-user">
-                                    <div class="sapo-avatar">${initial}</div>
-
-                                    <div class="sapo-user-text">
-                                        <span class="sapo-user-label">Pelapor</span>
-                                        <span class="sapo-user-name">${userName}</span>
-                                    </div>
-                                </div>
-
-                                <a href="/show/${item.id}" class="sapo-detail-link">
-                                    Detail
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                `;
-
-                container.insertAdjacentHTML('beforeend', card);
-            });
-        })
-        .catch(err => {
-            console.error('Error:', err);
-
+        if (!Array.isArray(data) || data.length === 0) {
             container.innerHTML = `
                 <div class="sapo-empty">
                     <div>
-                        <div class="sapo-empty-icon">⚠️</div>
-                        <h3>Data Gagal Dimuat</h3>
-                        <p>
-                            Terjadi masalah saat mengambil data laporan.
-                            Cek kembali route API, koneksi database, atau response JSON dari server.
-                        </p>
+                        <div class="sapo-empty-icon">🍃</div>
+                        <h3>Kondisi Lingkungan Bersih</h3>
+                        <p>Belum ada aduan penumpukan sampah liar yang masuk.
+                        Mari jaga lingkungan sekitar agar tetap bersih dan nyaman.</p>
                     </div>
-                </div>
-            `;
+                </div>`;
+            return;
+        }
+
+        data.forEach(item => {
+            const statusClass = getStatusClass(item.status);
+            const imgUrl = item.foto
+                ? `/storage/${item.foto}`
+                : 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?q=80&w=900';
+
+            const userName = item.user ? safeText(item.user.name, 'Masyarakat') : 'Masyarakat';
+            const initial  = userName.charAt(0).toUpperCase();
+            const desaName = item.desa ? safeText(item.desa.nama_desa, 'Sektor Umum') : 'Sektor Umum';
+            const rt       = item.rtrw ? safeText(item.rtrw.rt) : '-';
+            const rw       = item.rtrw ? safeText(item.rtrw.rw) : '-';
+
+            container.insertAdjacentHTML('beforeend', `
+                <article class="sapo-report-card">
+                    <div class="sapo-report-image">
+                        <img src="${imgUrl}" alt="Bukti Laporan Lapangan">
+                        <span class="sapo-status ${statusClass}">${safeText(item.status, 'pending')}</span>
+                    </div>
+                    <div class="sapo-report-body">
+                        <div class="sapo-location">
+                            <span>📍</span>
+                            <span>${desaName} • RT ${rt}/RW ${rw}</span>
+                        </div>
+                        <h3 class="sapo-report-title">${safeText(item.lokasi_spesifik, 'Lokasi belum tersedia')}</h3>
+                        <p class="sapo-report-desc">${safeText(item.deskripsi, 'Tidak ada deskripsi tambahan.')}</p>
+                        <div class="sapo-report-footer">
+                            <div class="sapo-user">
+                                <div class="sapo-avatar">${initial}</div>
+                                <div class="sapo-user-text">
+                                    <span class="sapo-user-label">Pelapor</span>
+                                    <span class="sapo-user-name">${userName}</span>
+                                </div>
+                            </div>
+                            <a href="/show/${item.id}" class="sapo-detail-link">
+                                Detail
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            `);
         });
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        container.innerHTML = `
+            <div class="sapo-empty">
+                <div>
+                    <div class="sapo-empty-icon">⚠️</div>
+                    <h3>Data Gagal Dimuat</h3>
+                    <p>Terjadi masalah saat mengambil data laporan. Cek koneksi atau response API.</p>
+                </div>
+            </div>`;
     });
+});
 </script>
 @endpush

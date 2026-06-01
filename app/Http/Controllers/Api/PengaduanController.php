@@ -86,4 +86,15 @@ class PengaduanController extends Controller
             'message' => 'Pengaduan berhasil dihapus.'
         ]);
     }
+
+    // Tambahkan method ini di PengaduanController
+    public function stats()
+    {
+    return response()->json([
+        'total'   => Pengaduan::count(),
+        'pending' => Pengaduan::where('status', 'pending')->count(),
+        'proses'  => Pengaduan::where('status', 'proses')->count(),
+        'selesai' => Pengaduan::where('status', 'selesai')->count(),
+    ]);
+    }
 }

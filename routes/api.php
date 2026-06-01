@@ -5,25 +5,25 @@ use App\Http\Controllers\Api\PengaduanController;
 use App\Http\Controllers\Api\WilayahController;
 use Illuminate\Support\Facades\Route;
 
-// --- JALUR PUBLIC (Bisa diakses tanpa login) ---
+// --- JALUR PUBLIC ---
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login',    [AuthController::class, 'login']);
 
-// --- JALUR PROTECTED (Wajib Login / Menyertakan Bearer Token) ---
+// Halaman index bisa diakses siapa saja tanpa login
+Route::get('/pengaduan',        [PengaduanController::class, 'index']);
+Route::get('/pengaduan/stats',  [PengaduanController::class, 'stats']);
+
+// --- JALUR PROTECTED ---
 Route::middleware('auth:sanctum')->group(function () {
-    
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Mengambil data wilayah untuk pilihan di Form Pengaduan
-    Route::get('/desa', [WilayahController::class, 'getDesa']);
+    Route::get('/desa',              [WilayahController::class, 'getDesa']);
     Route::get('/desa/{desa_id}/rtrw', [WilayahController::class, 'getRtrwByDesa']);
 
-    // Aksi masyarakat mengirim pengaduan
-    Route::post('/pengaduan', [PengaduanController::class, 'store']);
+    Route::post('/pengaduan',           [PengaduanController::class, 'store']);
 
-    // Aksi CRUD Admin Panel
-    Route::get('/admin/pengaduan', [PengaduanController::class, 'index']);          // Lihat Semua
-    Route::get('/admin/pengaduan/{id}', [PengaduanController::class, 'show']);     // Lihat Detail Satu Data
-    Route::put('/admin/pengaduan/{id}', [PengaduanController::class, 'update']);   // Edit Status Laporan
-    Route::delete('/admin/pengaduan/{id}', [PengaduanController::class, 'destroy']); // Hapus Laporan
+    // Admin
+    Route::get('/admin/pengaduan/{id}',    [PengaduanController::class, 'show']);
+    Route::put('/admin/pengaduan/{id}',    [PengaduanController::class, 'update']);
+    Route::delete('/admin/pengaduan/{id}', [PengaduanController::class, 'destroy']);
 });

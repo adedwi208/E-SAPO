@@ -54,51 +54,77 @@
 
 @push('scripts')
 <script>
+    // Helper: ambil token dari localStorage
+    function getAuthHeaders() {
+        const token = localStorage.getItem('access_token');
+        return {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        };
+    }
+
     // 1. Ambil data Desa saat halaman dimuat
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('/api/desa') // Sesuaikan dengan route API getDesa Anda
-            .then(res => res.json())
-            .then(data => {
-                const desaSelect = document.getElementById('desa_id');
-                data.forEach(desa => {
-                    let opt = document.createElement('option');
-                    opt.value = desa.id;
-                    opt.innerHTML = desa.nama_desa || desa.name; // sesuaikan property nama desa Anda
-                    desaSelect.appendChild(opt);
-                });
+    // FIX: tambahkan Authorization header karena route ada di belakang auth:sanctum
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/desa', {
+            headers: getAuthHeaders()
+        })
+        .then(res => {
+            if (res.status === 401) {
+                alert('Sesi habis, silakan login ulang.');
+                window.location.href = '/login';
+                return;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (!data) return;
+            const desaSelect = document.getElementById('desa_id');
+            data.forEach(desa => {
+                let opt = document.createElement('option');
+                opt.value = desa.id;
+                opt.innerHTML = desa.nama_desa; // sesuai fillable di Model Desa
+                desaSelect.appendChild(opt);
             });
+        })
+        .catch(err => console.error('Gagal memuat desa:', err));
     });
 
     // 2. Ambil data RT/RW secara dinamis saat Desa dipilih
-    document.getElementById('desa_id').addEventListener('change', function() {
+    // FIX: URL diubah dari /api/rtrw/{id} → /api/desa/{id}/rtrw (sesuai route backend)
+    // FIX: tambahkan Authorization header
+    document.getElementById('desa_id').addEventListener('change', function () {
         const desaId = this.value;
         const rtrwSelect = document.getElementById('rtrw_id');
-        
+
         rtrwSelect.innerHTML = '<option value="">-- Pilih RT/RW --</option>';
-        if(!desaId) {
+        if (!desaId) {
             rtrwSelect.disabled = true;
             return;
         }
 
-        fetch(`/api/rtrw/${desaId}`) // Sesuaikan dengan route API getRtrwByDesa Anda
-            .then(res => res.json())
-            .then(data => {
-                rtrwSelect.disabled = false;
-                data.forEach(item => {
-                    let opt = document.createElement('option');
-                    opt.value = item.id;
-                    opt.innerHTML = `RT ${item.rt} / RW ${item.rw}`; // sesuaikan property rt/rw Anda
-                    rtrwSelect.appendChild(opt);
-                });
+        fetch(`/api/desa/${desaId}/rtrw`, {  // ← URL sudah diperbaiki
+            headers: getAuthHeaders()
+        })
+        .then(res => res.json())
+        .then(data => {
+            rtrwSelect.disabled = false;
+            data.forEach(item => {
+                let opt = document.createElement('option');
+                opt.value = item.id;
+                opt.innerHTML = `RT ${item.rt} / RW ${item.rw}`;
+                rtrwSelect.appendChild(opt);
             });
+        })
+        .catch(err => console.error('Gagal memuat RT/RW:', err));
     });
 
-    // 3. Preview Foto Sebelum Upload
-    document.getElementById('foto-input').addEventListener('change', function() {
+    // 3. Preview Foto Sebelum Upload (tidak ada perubahan)
+    document.getElementById('foto-input').addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 document.getElementById('image-preview').src = e.target.result;
                 document.getElementById('image-preview').classList.remove('hidden');
                 document.getElementById('preview-text').classList.add('hidden');
@@ -107,27 +133,30 @@
         }
     });
 
-    // 4. Submit Form ke API Pengaduan
-    document.getElementById('form-pengaduan').addEventListener('submit', function(e) {
+    // 4. Submit Form ke API Pengaduan (tidak ada perubahan signifikan)
+    document.getElementById('form-pengaduan').addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
-        const token = localStorage.getItem('access_token'); // Mengambil token login dari local storage
 
-        fetch('/api/pengaduan', { // Sesuaikan route store pengaduan Anda
+        fetch('/api/pengaduan', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            },
+            headers: getAuthHeaders(), // Content-Type TIDAK diset manual, biarkan browser yang atur untuk FormData
             body: formData
         })
         .then(res => res.json())
         .then(resData => {
-            if(resData.data) {
+            if (resData.data) {
                 alert('Pengaduan berhasil terkirim!');
-                window.location.href = '/index'; // Arahkan ke halaman list aduan
+                window.location.href = '/';
             } else {
-                alert('Gagal mengirim aduan, periksa kembali inputan Anda.');
+                // Tampilkan pesan error validasi kalau ada
+                const errors = resData.errors;
+                if (errors) {
+                    const messages = Object.values(errors).flat().join('\n');
+                    alert('Validasi gagal:\n' + messages);
+                } else {
+                    alert(resData.message || 'Gagal mengirim aduan, periksa kembali inputan Anda.');
+                }
             }
         })
         .catch(err => console.error('Error:', err));
