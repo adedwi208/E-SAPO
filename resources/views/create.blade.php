@@ -685,7 +685,7 @@
                 <div class="report-info-body">
                     <h2>Laporkan titik sampah liar dengan data yang jelas.</h2>
                     <p>
-                        Pastikan lokasi, RT/RW, deskripsi kondisi, dan foto bukti diisi dengan benar
+                        Pastikan desa, lokasi spesifik, deskripsi kondisi, dan foto bukti diisi dengan benar
                         agar petugas lebih mudah melakukan verifikasi.
                     </p>
 
@@ -694,7 +694,7 @@
                             <div class="report-step-icon">1</div>
                             <div>
                                 <strong>Pilih wilayah laporan</strong>
-                                <span>Tentukan desa/kelurahan dan RT/RW sesuai titik kejadian.</span>
+                                <span>Tentukan desa/kelurahan, lalu tulis patokan jalan di lokasi spesifik.</span>
                             </div>
                         </div>
 
@@ -732,39 +732,23 @@
                 <div id="form-alert" class="report-alert"></div>
 
                 <form id="form-pengaduan" enctype="multipart/form-data" class="report-form">
-                    <div class="report-grid-2">
-                        <div class="report-field">
-                            <label for="desa_id">Desa / Kelurahan</label>
+                    <div class="report-field">
+    <label for="desa_id">Desa / Kelurahan</label>
 
-                            <div class="report-input-wrap">
-                                <span class="report-input-icon">🏘️</span>
+    <div class="report-input-wrap">
+        <span class="report-input-icon">🏘️</span>
 
-                                <select id="desa_id" name="desa_id" required class="report-select">
-                                    <option value="">Pilih Desa / Kelurahan</option>
-                                </select>
+        <select id="desa_id" name="desa_id" required class="report-select">
+            <option value="">Pilih Desa / Kelurahan</option>
+        </select>
 
-                                <span class="report-select-arrow">▼</span>
-                            </div>
+        <span class="report-select-arrow">▼</span>
+    </div>
 
-                            <span class="report-help">Pilih wilayah utama lokasi aduan.</span>
-                        </div>
-
-                        <div class="report-field">
-                            <label for="rtrw_id">RT / RW</label>
-
-                            <div class="report-input-wrap">
-                                <span class="report-input-icon">📍</span>
-
-                                <select id="rtrw_id" name="rtrw_id" required disabled class="report-select">
-                                    <option value="">Pilih RT/RW</option>
-                                </select>
-
-                                <span class="report-select-arrow">▼</span>
-                            </div>
-
-                            <span class="report-help">RT/RW akan aktif setelah desa dipilih.</span>
-                        </div>
-                    </div>
+    <span class="report-help">
+        Pilih desa/kelurahan lokasi utama aduan. Detail RT/RW atau patokan jalan tulis di lokasi spesifik.
+    </span>
+</div>
 
                     <div class="report-field">
                         <label for="lokasi_spesifik">Lokasi Spesifik</label>
@@ -849,7 +833,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const desaSelect = document.getElementById('desa_id');
-        const rtrwSelect = document.getElementById('rtrw_id');
         const fotoInput = document.getElementById('foto-input');
         const uploadBox = document.getElementById('upload-box');
         const imagePreview = document.getElementById('image-preview');
@@ -857,9 +840,28 @@
         const alertBox = document.getElementById('form-alert');
         const submitBtn = document.getElementById('submit-btn');
 
+        const token = localStorage.getItem('access_token');
+        const role = localStorage.getItem('user_role');
+
+        if (!token) {
+            alert('Silakan login terlebih dahulu.');
+            window.location.href = '/login';
+            return;
+        }
+
+        if (role !== 'masyarakat') {
+            alert('Halaman buat aduan hanya untuk masyarakat.');
+            window.location.href = '/admin/dashboard';
+            return;
+        }
+
         const showAlert = (message, type = 'error') => {
             alertBox.textContent = message;
             alertBox.className = `report-alert show ${type}`;
+            alertBox.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         };
 
         const clearAlert = () => {
@@ -874,24 +876,37 @@
                 : '<span>Kirim Laporan</span><b>→</b>';
         };
 
-        const safeText = (value, fallback = '') => {
-            if (value === null || value === undefined || value === '') return fallback;
-            return String(value);
-        };
-
         const loadDesa = () => {
+            clearAlert();
+
+            desaSelect.innerHTML = '<option value="">Memuat data desa...</option>';
+            desaSelect.disabled = true;
+
             fetch('/api/desa', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(async response => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw data;
+                }
+
+                return data;
+            })
             .then(data => {
                 desaSelect.innerHTML = '<option value="">Pilih Desa / Kelurahan</option>';
 
                 if (!Array.isArray(data)) {
-                    showAlert('Data desa tidak valid. Cek kembali response API /api/desa.');
+                    showAlert('Data desa tidak valid. Cek response API /api/desa.');
+                    return;
+                }
+
+                if (data.length === 0) {
+                    showAlert('Data desa masih kosong. Isi dulu tabel desas di database.');
                     return;
                 }
 
@@ -901,57 +916,15 @@
                     option.textContent = desa.nama_desa || desa.name || 'Nama desa tidak tersedia';
                     desaSelect.appendChild(option);
                 });
+
+                desaSelect.disabled = false;
             })
             .catch(error => {
-                console.error('Error:', error);
-                showAlert('Gagal memuat data desa. Pastikan API desa dan koneksi database aktif.');
+                console.error('Error load desa:', error);
+                desaSelect.innerHTML = '<option value="">Gagal memuat desa</option>';
+                showAlert(error.message || 'Gagal memuat data desa. Cek route /api/desa dan database.');
             });
         };
-
-        const loadRtrw = (desaId) => {
-            rtrwSelect.innerHTML = '<option value="">Memuat RT/RW...</option>';
-            rtrwSelect.disabled = true;
-
-            if (!desaId) {
-                rtrwSelect.innerHTML = '<option value="">Pilih RT/RW</option>';
-                return;
-            }
-
-            fetch(`/api/rtrw/${desaId}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                rtrwSelect.innerHTML = '<option value="">Pilih RT/RW</option>';
-
-                if (!Array.isArray(data)) {
-                    showAlert('Data RT/RW tidak valid. Cek kembali response API RT/RW.');
-                    return;
-                }
-
-                data.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = `RT ${safeText(item.rt, '-')} / RW ${safeText(item.rw, '-')}`;
-                    rtrwSelect.appendChild(option);
-                });
-
-                rtrwSelect.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                rtrwSelect.innerHTML = '<option value="">Gagal memuat RT/RW</option>';
-                showAlert('Gagal memuat data RT/RW. Cek route API atau database.');
-            });
-        };
-
-        desaSelect.addEventListener('change', function () {
-            clearAlert();
-            loadRtrw(this.value);
-        });
 
         fotoInput.addEventListener('change', function () {
             clearAlert();
@@ -997,10 +970,27 @@
             event.preventDefault();
             clearAlert();
 
-            const token = localStorage.getItem('access_token');
+            if (!desaSelect.value) {
+                showAlert('Pilih desa terlebih dahulu.');
+                return;
+            }
 
-            if (!token) {
-                showAlert('Anda harus login terlebih dahulu sebelum membuat laporan.');
+            const lokasi = document.getElementById('lokasi_spesifik').value.trim();
+            const deskripsi = document.getElementById('deskripsi').value.trim();
+            const foto = fotoInput.files[0];
+
+            if (!lokasi) {
+                showAlert('Lokasi spesifik wajib diisi.');
+                return;
+            }
+
+            if (!deskripsi) {
+                showAlert('Deskripsi kondisi sampah wajib diisi.');
+                return;
+            }
+
+            if (!foto) {
+                showAlert('Foto bukti sampah wajib diupload.');
                 return;
             }
 
@@ -1026,20 +1016,18 @@
                 return data;
             })
             .then(data => {
-                if (data.data || data.id || data.message) {
-                    showAlert('Pengaduan berhasil terkirim. Anda akan diarahkan ke halaman utama.', 'success');
+                showAlert(data.message || 'Pengaduan berhasil terkirim.', 'success');
 
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 800);
+                form.reset();
+                uploadBox.classList.remove('has-preview');
+                imagePreview.src = '#';
 
-                    return;
-                }
-
-                showAlert('Gagal mengirim aduan. Periksa kembali inputan Anda.');
+                setTimeout(() => {
+                    window.location.href = '/masyarakat/dashboard';
+                }, 1000);
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error submit pengaduan:', error);
 
                 if (error.errors) {
                     const firstError = Object.values(error.errors)[0][0];
@@ -1047,7 +1035,7 @@
                     return;
                 }
 
-                showAlert(error.message || 'Terjadi kesalahan saat mengirim pengaduan.');
+                showAlert(error.message || 'Terjadi kesalahan saat mengirim pengaduan. Cek controller dan database.');
             })
             .finally(() => {
                 setSubmitLoading(false);

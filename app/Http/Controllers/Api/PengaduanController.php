@@ -9,74 +9,105 @@ use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
 {
-    // MASYARAKAT: Membuat aduan baru
+    public function index()
+    {
+        $pengaduan = Pengaduan::with(['user', 'desa'])
+            ->latest()
+            ->get()
+            ->map(function ($item) {
+                $item->foto_url = $item->foto
+                    ? asset('storage/' . $item->foto)
+                    : null;
+
+                return $item;
+            });
+
+        return response()->json($pengaduan);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'desa_id' => 'required|exists:desas,id',
-            'rtrw_id' => 'required|exists:rtrws,id',
-            'lokasi_spesifik' => 'required|string',
+            'lokasi_spesifik' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Simpan file foto ke folder storage/app/public/pengaduan-sampah
-        $fotoPath = $request->file('foto')->store('pengaduan-sampah', 'public');
+        $fotoPath = null;
+
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('pengaduan', 'public');
+        }
 
         $pengaduan = Pengaduan::create([
-            'user_id' => auth()->id(), 
+            'user_id' => $request->user()->id,
             'desa_id' => $request->desa_id,
-            'rtrw_id' => $request->rtrw_id,
+            'rtrw_id' => null,
             'lokasi_spesifik' => $request->lokasi_spesifik,
             'deskripsi' => $request->deskripsi,
             'foto' => $fotoPath,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         return response()->json([
-            'message' => 'Pengaduan sampah berhasil dikirim!',
-            'data' => $pengaduan
+            'message' => 'Pengaduan berhasil dikirim.',
+            'data' => $pengaduan,
         ], 201);
     }
 
-    // ADMIN: [READ] Lihat semua pengaduan masyarakat secara detail
-    public function index()
-    {
-        $pengaduan = Pengaduan::with(['user', 'desa', 'rtrw'])->latest()->get();
-        return response()->json($pengaduan);
-    }
-
-    // ADMIN: [READ DETAIL] Lihat detail satu pengaduan
     public function show($id)
     {
-        $pengaduan = Pengaduan::with(['user', 'desa', 'rtrw'])->findOrFail($id);
+        $pengaduan = Pengaduan::with(['user', 'desa'])->find($id);
+
+        if (!$pengaduan) {
+            return response()->json([
+                'message' => 'Data pengaduan tidak ditemukan.'
+            ], 404);
+        }
+
+        $pengaduan->foto_url = $pengaduan->foto
+            ? asset('storage/' . $pengaduan->foto)
+            : null;
+
         return response()->json($pengaduan);
     }
 
-    // ADMIN: [UPDATE] Memperbarui status pengaduan
     public function update(Request $request, $id)
     {
+        $pengaduan = Pengaduan::find($id);
+
+        if (!$pengaduan) {
+            return response()->json([
+                'message' => 'Data pengaduan tidak ditemukan.'
+            ], 404);
+        }
+
         $request->validate([
-            'status' => 'required|in:pending,proses,selesai'
+            'status' => 'required|in:pending,proses,selesai',
         ]);
 
-        $pengaduan = Pengaduan::findOrFail($id);
         $pengaduan->update([
-            'status' => $request->status
+            'status' => $request->status,
         ]);
 
         return response()->json([
-            'message' => 'Status pengaduan berhasil diubah.',
-            'data' => $pengaduan
+            'message' => 'Status pengaduan berhasil diperbarui.',
+            'data' => $pengaduan,
         ]);
     }
 
-    // ADMIN: [DELETE] Menghapus data laporan beserta filenya
     public function destroy($id)
     {
-        $pengaduan = Pengaduan::findOrFail($id);
-        
-        if ($pengaduan->foto) {
+        $pengaduan = Pengaduan::find($id);
+
+        if (!$pengaduan) {
+            return response()->json([
+                'message' => 'Data pengaduan tidak ditemukan.'
+            ], 404);
+        }
+
+        if ($pengaduan->foto && Storage::disk('public')->exists($pengaduan->foto)) {
             Storage::disk('public')->delete($pengaduan->foto);
         }
 

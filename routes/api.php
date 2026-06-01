@@ -5,25 +5,75 @@ use App\Http\Controllers\Api\PengaduanController;
 use App\Http\Controllers\Api\WilayahController;
 use Illuminate\Support\Facades\Route;
 
-// --- JALUR PUBLIC (Bisa diakses tanpa login) ---
+/*
+|--------------------------------------------------------------------------
+| API Routes - E-SAPO
+|--------------------------------------------------------------------------
+| Public  = bisa diakses tanpa login
+| Private = wajib login pakai Bearer Token Sanctum
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC ROUTES
+|--------------------------------------------------------------------------
+| Login, register, dan data desa untuk dropdown form.
+|--------------------------------------------------------------------------
+*/
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// --- JALUR PROTECTED (Wajib Login / Menyertakan Bearer Token) ---
+Route::get('/desa', [WilayahController::class, 'getDesa']);
+
+
+/*
+|--------------------------------------------------------------------------
+| PROTECTED ROUTES
+|--------------------------------------------------------------------------
+| Semua route di bawah ini wajib login pakai Bearer Token Sanctum.
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth:sanctum')->group(function () {
-    
+
+    /*
+    |--------------------------------------------------------------------------
+    | AUTH
+    |--------------------------------------------------------------------------
+    */
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Mengambil data wilayah untuk pilihan di Form Pengaduan
-    Route::get('/desa', [WilayahController::class, 'getDesa']);
-    Route::get('/desa/{desa_id}/rtrw', [WilayahController::class, 'getRtrwByDesa']);
 
-    // Aksi masyarakat mengirim pengaduan
-    Route::post('/pengaduan', [PengaduanController::class, 'store']);
+    /*
+    |--------------------------------------------------------------------------
+    | MASYARAKAT ROUTES
+    |--------------------------------------------------------------------------
+    | Role masyarakat hanya boleh membuat pengaduan.
+    |--------------------------------------------------------------------------
+    */
 
-    // Aksi CRUD Admin Panel
-    Route::get('/admin/pengaduan', [PengaduanController::class, 'index']);          // Lihat Semua
-    Route::get('/admin/pengaduan/{id}', [PengaduanController::class, 'show']);     // Lihat Detail Satu Data
-    Route::put('/admin/pengaduan/{id}', [PengaduanController::class, 'update']);   // Edit Status Laporan
-    Route::delete('/admin/pengaduan/{id}', [PengaduanController::class, 'destroy']); // Hapus Laporan
+    Route::middleware('role:masyarakat')->group(function () {
+        Route::post('/pengaduan', [PengaduanController::class, 'store']);
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN ROUTES
+    |--------------------------------------------------------------------------
+    | Role admin bisa melihat, mengubah status, dan menghapus pengaduan.
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('admin')
+        ->middleware('role:admin')
+        ->group(function () {
+            Route::get('/pengaduan', [PengaduanController::class, 'index']);
+            Route::get('/pengaduan/{id}', [PengaduanController::class, 'show']);
+            Route::put('/pengaduan/{id}', [PengaduanController::class, 'update']);
+            Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy']);
+        });
 });

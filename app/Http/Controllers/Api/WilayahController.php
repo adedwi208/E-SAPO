@@ -10,12 +10,18 @@ class WilayahController extends Controller
 {
     public function getDesa()
     {
-        return response()->json(Desa::all());
+        $desa = Desa::orderBy('nama_desa', 'asc')->get();
+
+        return response()->json($desa);
     }
 
     public function getRtrwByDesa($desa_id)
     {
-        $rtrw = Rtrw::where('desa_id', $desa_id)->get();
+        $rtrw = Rtrw::where('desa_id', $desa_id)
+            ->orderBy('rw', 'asc')
+            ->orderBy('rt', 'asc')
+            ->get();
+
         return response()->json($rtrw);
     }
 }

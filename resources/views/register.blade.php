@@ -533,18 +533,29 @@
 
             return resData;
         })
-        .then(resData => {
-            if (resData.access_token) {
-                localStorage.setItem('access_token', resData.access_token);
-                localStorage.setItem('user_role', resData.user.role);
-                localStorage.setItem('user_name', resData.user.name);
+.then(resData => {
+    if (resData.access_token) {
+        const role = resData.role || resData.user.role;
 
-                alert('Registrasi Berhasil!');
-                window.location.href = '/';
-            } else {
-                alert(resData.message || 'Registrasi gagal, periksa kembali data Anda.');
-            }
-        })
+        localStorage.setItem('access_token', resData.access_token);
+        localStorage.setItem('user_role', role);
+        localStorage.setItem('user_name', resData.user.name);
+
+        alert('Registrasi Berhasil!');
+
+        if (role === 'admin') {
+            window.location.href = '/admin/dashboard';
+        } else if (role === 'masyarakat') {
+            window.location.href = '/';
+        } else {
+            alert('Role akun tidak dikenali.');
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+    } else {
+        alert(resData.message || 'Registrasi gagal, periksa kembali data Anda.');
+    }
+})
         .catch(err => {
             console.error('Error:', err);
             alert(err.message || 'Terjadi kesalahan pada sistem registrasi.');

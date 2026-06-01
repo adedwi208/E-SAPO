@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pengaduan extends Model
 {
-    protected $fillable = ['user_id', 'desa_id', 'rtrw_id', 'lokasi_spesifik', 'deskripsi', 'foto', 'status'];
+    protected $fillable = [
+        'user_id',
+        'desa_id',
+        'rtrw_id',
+        'lokasi_spesifik',
+        'deskripsi',
+        'foto',
+        'status',
+    ];
 
     public function user(): BelongsTo
     {

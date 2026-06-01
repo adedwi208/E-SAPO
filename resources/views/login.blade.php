@@ -372,6 +372,7 @@
 @endsection
 
 @push('scripts')
+@push('scripts')
 <script>
     document.getElementById('form-login').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -403,7 +404,16 @@
                 localStorage.setItem('user_name', resData.user.name);
 
                 alert('Login Berhasil!');
-                window.location.href = '/';
+
+                if (resData.role === 'admin') {
+                    window.location.href = '/admin/dashboard';
+                } else if (resData.role === 'masyarakat') {
+                    window.location.href = '/masyarakat/dashboard';
+                } else {
+                    alert('Role akun tidak dikenali.');
+                    localStorage.clear();
+                    window.location.href = '/login';
+                }
             } else {
                 alert(resData.message || 'Email atau password salah.');
             }

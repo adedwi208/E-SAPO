@@ -4,20 +4,24 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Routes - E-SAPO
 |--------------------------------------------------------------------------
-| Semua route halaman utama E-SAPO ditaruh di sini.
+| Route ini hanya untuk halaman Blade.
+| Proses data tetap lewat routes/api.php.
 */
 
 /*
 |--------------------------------------------------------------------------
-| Halaman Utama
+| Public Pages
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', function () {
     return view('index');
 })->name('home');
+
+Route::redirect('/index', '/');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +37,10 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+
 /*
 |--------------------------------------------------------------------------
-| Laporan Sampah
+| Masyarakat Pages
 |--------------------------------------------------------------------------
 */
 
@@ -49,11 +54,33 @@ Route::get('/show/{id}', function ($id) {
     ]);
 })->name('laporan.show');
 
+
 /*
 |--------------------------------------------------------------------------
-| Redirect Tambahan
+| Admin Pages
 |--------------------------------------------------------------------------
-| Kalau user buka /index, langsung diarahkan ke halaman utama.
 */
 
-Route::redirect('/index', '/');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/pengaduan', function () {
+        return view('admin.index');
+    })->name('pengaduan.index');
+
+    Route::redirect('/', '/admin/dashboard');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Fallback
+|--------------------------------------------------------------------------
+| Kalau user buka URL web yang tidak ada, balikin ke home.
+*/
+
+Route::fallback(function () {
+    return redirect()->route('home');
+});
