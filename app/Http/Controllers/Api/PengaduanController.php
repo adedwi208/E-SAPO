@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
 {
-    public function index()
+    /*
+    |--------------------------------------------------------------------------
+    | PUBLIC INDEX
+    |--------------------------------------------------------------------------
+    | Dipakai dashboard masyarakat / halaman publik untuk transparansi laporan.
+    |--------------------------------------------------------------------------
+    */
+
+    public function publicIndex()
     {
-        $pengaduan = Pengaduan::with(['user', 'desa'])
+        $pengaduan = Pengaduan::with([
+                'user:id,name',
+                'desa:id,nama_desa',
+            ])
             ->latest()
             ->get()
             ->map(function ($item) {
@@ -24,6 +35,43 @@ class PengaduanController extends Controller
 
         return response()->json($pengaduan);
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN INDEX
+    |--------------------------------------------------------------------------
+    | Dipakai admin untuk melihat semua data laporan.
+    |--------------------------------------------------------------------------
+    */
+
+    public function index()
+    {
+        $pengaduan = Pengaduan::with([
+                'user',
+                'desa',
+            ])
+            ->latest()
+            ->get()
+            ->map(function ($item) {
+                $item->foto_url = $item->foto
+                    ? asset('storage/' . $item->foto)
+                    : null;
+
+                return $item;
+            });
+
+        return response()->json($pengaduan);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STORE
+    |--------------------------------------------------------------------------
+    | Dipakai masyarakat untuk membuat laporan baru.
+    |--------------------------------------------------------------------------
+    */
 
     public function store(Request $request)
     {
@@ -56,9 +104,22 @@ class PengaduanController extends Controller
         ], 201);
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW
+    |--------------------------------------------------------------------------
+    | Dipakai admin untuk melihat detail satu laporan.
+    |--------------------------------------------------------------------------
+    */
+
     public function show($id)
     {
-        $pengaduan = Pengaduan::with(['user', 'desa'])->find($id);
+        $pengaduan = Pengaduan::with([
+                'user',
+                'desa',
+            ])
+            ->find($id);
 
         if (!$pengaduan) {
             return response()->json([
@@ -72,6 +133,15 @@ class PengaduanController extends Controller
 
         return response()->json($pengaduan);
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE
+    |--------------------------------------------------------------------------
+    | Dipakai admin untuk mengubah status laporan.
+    |--------------------------------------------------------------------------
+    */
 
     public function update(Request $request, $id)
     {
@@ -96,6 +166,15 @@ class PengaduanController extends Controller
             'data' => $pengaduan,
         ]);
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DESTROY
+    |--------------------------------------------------------------------------
+    | Dipakai admin untuk menghapus laporan.
+    |--------------------------------------------------------------------------
+    */
 
     public function destroy($id)
     {

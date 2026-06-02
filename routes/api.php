@@ -18,14 +18,18 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
-| Login, register, dan data desa untuk dropdown form.
+| Login, register, data desa, dan transparansi laporan publik.
 |--------------------------------------------------------------------------
 */
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Data desa untuk dropdown form pengaduan
 Route::get('/desa', [WilayahController::class, 'getDesa']);
+
+// Data laporan publik untuk dashboard masyarakat / transparansi
+Route::get('/pengaduan', [PengaduanController::class, 'publicIndex']);
 
 
 /*
