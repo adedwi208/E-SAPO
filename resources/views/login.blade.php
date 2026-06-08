@@ -175,6 +175,22 @@
             0 10px 25px rgba(15, 23, 42, 0.06);
     }
 
+    .esapo-login-message {
+        display: none;
+        padding: 13px 15px;
+        border-radius: 14px;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .esapo-login-message.error {
+        display: block;
+        color: #b91c1c;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+    }
+
     .esapo-login-btn {
         width: 100%;
         height: 55px;
@@ -202,6 +218,12 @@
         box-shadow:
             0 20px 40px rgba(16, 185, 129, 0.36),
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .esapo-login-btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
     }
 
     .esapo-login-btn b {
@@ -310,6 +332,7 @@
 
         <div class="esapo-brand">
             <div class="esapo-logo-box">♻</div>
+
             <div>
                 <h2>E-SAPO</h2>
                 <p>Sistem Pelaporan Sampah Liar</p>
@@ -318,53 +341,71 @@
 
         <div class="esapo-header">
             <h1>Selamat Datang</h1>
-            <p>Masuk ke akun E-SAPO untuk melaporkan sampah liar dengan mudah dan cepat.</p>
+
+            <p>
+                Masuk menggunakan akun yang telah terdaftar.
+                Sistem akan mengarahkan Anda sesuai role akun di database.
+            </p>
         </div>
 
         <form id="form-login" class="esapo-form">
+            <div id="login-message" class="esapo-login-message"></div>
+
             <div class="esapo-field">
-                <label>Alamat Email</label>
+                <label for="email">Alamat Email</label>
+
                 <div class="esapo-input-wrap">
                     <span class="esapo-input-icon">✉</span>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        required 
+
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        required
+                        autocomplete="email"
                         placeholder="nama@email.com"
                     >
                 </div>
             </div>
 
             <div class="esapo-field">
-                <label>Password</label>
+                <label for="password">Password</label>
+
                 <div class="esapo-input-wrap">
                     <span class="esapo-input-icon">🔒</span>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        required 
+
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
+                        autocomplete="current-password"
                         placeholder="Masukkan password"
                     >
                 </div>
             </div>
 
-            <button type="submit" class="esapo-login-btn">
-                <span>Masuk Sekarang</span>
+            <button
+                id="login-button"
+                type="submit"
+                class="esapo-login-btn"
+            >
+                <span id="login-button-text">Masuk Sekarang</span>
                 <b>→</b>
             </button>
         </form>
 
-    <div class="esapo-links">
-    <p>
-        Belum punya akun?
-        <a href="{{ route('register') }}">Daftar di sini</a>
-    </p>
+        <div class="esapo-links">
+            <p>
+                Belum punya akun?
+                <a href="{{ route('register') }}">Daftar di sini</a>
+            </p>
 
-    <p>
-        Kembali ke
-        <a href="{{ route('home') }}">Beranda</a>
-    </p>
-</div>
+            <p>
+                Kembali ke
+                <a href="{{ route('home') }}">Beranda</a>
+            </p>
+        </div>
 
     </div>
 </div>
@@ -372,55 +413,111 @@
 @endsection
 
 @push('scripts')
-@push('scripts')
 <script>
-    document.getElementById('form-login').addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+        const formLogin = document.getElementById('form-login');
+        const loginButton = document.getElementById('login-button');
+        const loginButtonText = document.getElementById('login-button-text');
+        const loginMessage = document.getElementById('login-message');
 
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
+        const showError = function (message) {
+            loginMessage.textContent = message;
+            loginMessage.className = 'esapo-login-message error';
+        };
 
-        fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(async res => {
-            const resData = await res.json();
+        const clearError = function () {
+            loginMessage.textContent = '';
+            loginMessage.className = 'esapo-login-message';
+        };
 
-            if (!res.ok) {
-                throw resData;
-            }
+        formLogin.addEventListener('submit', async function (event) {
+            event.preventDefault();
 
-            return resData;
-        })
-        .then(resData => {
-            if (resData.access_token) {
-                localStorage.setItem('access_token', resData.access_token);
-                localStorage.setItem('user_role', resData.role);
-                localStorage.setItem('user_name', resData.user.name);
+            clearError();
 
-                alert('Login Berhasil!');
+            loginButton.disabled = true;
+            loginButtonText.textContent = 'Sedang Masuk...';
 
-                if (resData.role === 'admin') {
-                    window.location.href = '/admin/dashboard';
-                } else if (resData.role === 'masyarakat') {
-                    window.location.href = '/masyarakat/dashboard';
-                } else {
-                    alert('Role akun tidak dikenali.');
-                    localStorage.clear();
-                    window.location.href = '/login';
+            try {
+                const formData = new FormData(formLogin);
+                const loginData = Object.fromEntries(formData.entries());
+
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                let result;
+
+                try {
+                    result = await response.json();
+                } catch (error) {
+                    throw new Error('Respons dari server tidak valid.');
                 }
-            } else {
-                alert(resData.message || 'Email atau password salah.');
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message ||
+                        result.errors?.email?.[0] ||
+                        'Email atau password salah.'
+                    );
+                }
+
+                if (!result.access_token) {
+                    throw new Error('Token login tidak ditemukan.');
+                }
+
+                const role = String(
+                    result.user?.role || result.role || ''
+                ).toLowerCase();
+
+                const userName = result.user?.name || 'Pengguna';
+
+                sessionStorage.setItem(
+                    'access_token',
+                    result.access_token
+                );
+
+                sessionStorage.setItem(
+                    'user_role',
+                    role
+                );
+
+                sessionStorage.setItem(
+                    'user_name',
+                    userName
+                );
+
+                if (role === 'admin') {
+                    window.location.href = "{{ route('admin.dashboard') }}";
+                    return;
+                }
+
+                if (role === 'masyarakat') {
+                    window.location.href = "{{ route('home') }}";
+                    return;
+                }
+
+                sessionStorage.removeItem('access_token');
+                sessionStorage.removeItem('user_role');
+                sessionStorage.removeItem('user_name');
+
+                throw new Error('Role akun tidak dikenali oleh sistem.');
+            } catch (error) {
+                console.error('Login Error:', error);
+
+                showError(
+                    error.message ||
+                    'Terjadi kesalahan saat melakukan login.'
+                );
+            } finally {
+                loginButton.disabled = false;
+                loginButtonText.textContent = 'Masuk Sekarang';
             }
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            alert(err.message || 'Terjadi kesalahan sistem.');
         });
     });
 </script>

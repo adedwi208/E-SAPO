@@ -183,8 +183,7 @@
         z-index: 2;
     }
 
-    .admin-btn-primary,
-    .admin-btn-light {
+    .admin-btn-primary {
         min-height: 52px;
         padding: 0 18px;
         border-radius: 16px;
@@ -199,23 +198,13 @@
         text-transform: uppercase;
         transition: 0.24s ease;
         white-space: nowrap;
-    }
-
-    .admin-btn-primary {
         color: #ffffff;
         background: var(--ad-dark);
         box-shadow: 0 14px 28px rgba(16, 32, 24, 0.16);
     }
 
-    .admin-btn-primary:hover,
-    .admin-btn-light:hover {
+    .admin-btn-primary:hover {
         transform: translateY(-2px);
-    }
-
-    .admin-btn-light {
-        color: var(--ad-dark);
-        background: #f1f5ee;
-        border: 1px solid rgba(16, 32, 24, 0.08);
     }
 
     .admin-profile-card {
@@ -634,8 +623,7 @@
             flex-direction: column;
         }
 
-        .admin-btn-primary,
-        .admin-btn-light {
+        .admin-btn-primary {
             width: 100%;
         }
 
@@ -670,10 +658,6 @@
                     <a href="{{ route('admin.pengaduan.index') }}" class="admin-btn-primary">
                         Kelola Pengaduan →
                     </a>
-
-                    <a href="{{ route('home') }}" class="admin-btn-light">
-                        Lihat Beranda
-                    </a>
                 </div>
             </div>
 
@@ -701,6 +685,7 @@
                     <span class="admin-stat-dot"></span>
                     Total
                 </span>
+
                 <span id="stat-total" class="admin-stat-number">0</span>
                 <span class="admin-stat-text">Semua laporan</span>
             </div>
@@ -710,6 +695,7 @@
                     <span class="admin-stat-dot pending"></span>
                     Pending
                 </span>
+
                 <span id="stat-pending" class="admin-stat-number">0</span>
                 <span class="admin-stat-text">Menunggu verifikasi</span>
             </div>
@@ -719,6 +705,7 @@
                     <span class="admin-stat-dot proses"></span>
                     Proses
                 </span>
+
                 <span id="stat-proses" class="admin-stat-number">0</span>
                 <span class="admin-stat-text">Sedang ditangani</span>
             </div>
@@ -728,6 +715,7 @@
                     <span class="admin-stat-dot selesai"></span>
                     Selesai
                 </span>
+
                 <span id="stat-selesai" class="admin-stat-number">0</span>
                 <span class="admin-stat-text">Sudah tuntas</span>
             </div>
@@ -737,16 +725,24 @@
             <a href="{{ route('admin.pengaduan.index') }}" class="admin-action-card">
                 <div>
                     <div class="admin-action-icon">📋</div>
+
                     <strong>Kelola Data Laporan</strong>
-                    <span>Lihat, ubah status, dan hapus data laporan masyarakat.</span>
+
+                    <span>
+                        Lihat seluruh data laporan yang dikirimkan oleh masyarakat.
+                    </span>
                 </div>
             </a>
 
-            <a href="{{ route('home') }}" class="admin-action-card">
+            <a href="{{ route('admin.pengaduan.index') }}" class="admin-action-card">
                 <div>
-                    <div class="admin-action-icon">🌱</div>
-                    <strong>Lihat Halaman Publik</strong>
-                    <span>Cek tampilan beranda masyarakat dan arsip laporan publik.</span>
+                    <div class="admin-action-icon">🔄</div>
+
+                    <strong>Kelola Status Laporan</strong>
+
+                    <span>
+                        Ubah status laporan menjadi pending, proses, atau selesai.
+                    </span>
                 </div>
             </a>
         </section>
@@ -755,7 +751,10 @@
             <div class="admin-section-head">
                 <div>
                     <h2 class="admin-section-title">Laporan Terbaru</h2>
-                    <p class="admin-section-note">Menampilkan 5 pengaduan terbaru dari masyarakat.</p>
+
+                    <p class="admin-section-note">
+                        Menampilkan 5 pengaduan terbaru dari masyarakat.
+                    </p>
                 </div>
 
                 <a href="{{ route('admin.pengaduan.index') }}" class="admin-mini-link">
@@ -781,7 +780,9 @@
                         <tbody id="latest-body">
                             <tr>
                                 <td colspan="7" class="admin-empty">
-                                    <span class="admin-loading">Memuat data laporan...</span>
+                                    <span class="admin-loading">
+                                        Memuat data laporan...
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -798,13 +799,29 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const token = localStorage.getItem('access_token');
-        const role = localStorage.getItem('user_role');
-        const userName = localStorage.getItem('user_name');
+        const token = sessionStorage.getItem('access_token');
+        const role = sessionStorage.getItem('user_role');
+        const userName = sessionStorage.getItem('user_name');
 
-        if (!token || role !== 'admin') {
-            alert('Akses ditolak. Halaman ini hanya untuk admin.');
-            window.location.href = '/login';
+        const clearSessionAndRedirect = function (message) {
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('user_role');
+            sessionStorage.removeItem('user_name');
+
+            if (message) {
+                alert(message);
+            }
+
+            window.location.href = "{{ route('login') }}";
+        };
+
+        if (!token) {
+            clearSessionAndRedirect('Silakan login terlebih dahulu.');
+            return;
+        }
+
+        if (role !== 'admin') {
+            clearSessionAndRedirect('Akses ditolak. Halaman ini hanya untuk admin.');
             return;
         }
 
@@ -820,7 +837,7 @@
         const statSelesai = document.getElementById('stat-selesai');
         const latestBody = document.getElementById('latest-body');
 
-        const safeText = (value, fallback = '-') => {
+        const safeText = function (value, fallback = '-') {
             if (value === null || value === undefined || value === '') {
                 return fallback;
             }
@@ -828,7 +845,7 @@
             return String(value);
         };
 
-        const escapeHtml = (value) => {
+        const escapeHtml = function (value) {
             return safeText(value, '')
                 .replaceAll('&', '&amp;')
                 .replaceAll('<', '&lt;')
@@ -837,31 +854,61 @@
                 .replaceAll("'", '&#039;');
         };
 
-        const normalizeStatus = (status) => {
+        const normalizeStatus = function (status) {
             const value = safeText(status, 'pending').toLowerCase();
 
-            if (value === 'proses' || value === 'diproses' || value === 'process') {
+            if (
+                value === 'proses' ||
+                value === 'diproses' ||
+                value === 'process'
+            ) {
                 return 'proses';
             }
 
-            if (value === 'selesai' || value === 'done' || value === 'completed') {
+            if (
+                value === 'selesai' ||
+                value === 'done' ||
+                value === 'completed'
+            ) {
                 return 'selesai';
             }
 
             return 'pending';
         };
 
-        const statusLabel = (status) => {
-            if (status === 'proses') return 'Proses';
-            if (status === 'selesai') return 'Selesai';
+        const statusLabel = function (status) {
+            if (status === 'proses') {
+                return 'Proses';
+            }
+
+            if (status === 'selesai') {
+                return 'Selesai';
+            }
+
             return 'Pending';
         };
 
-        const setStatsFromList = (data) => {
+        const resetStats = function () {
+            statTotal.innerText = 0;
+            statPending.innerText = 0;
+            statProses.innerText = 0;
+            statSelesai.innerText = 0;
+        };
+
+        const setStatsFromList = function (data) {
             const total = data.length;
-            const pending = data.filter(item => normalizeStatus(item.status) === 'pending').length;
-            const proses = data.filter(item => normalizeStatus(item.status) === 'proses').length;
-            const selesai = data.filter(item => normalizeStatus(item.status) === 'selesai').length;
+
+            const pending = data.filter(function (item) {
+                return normalizeStatus(item.status) === 'pending';
+            }).length;
+
+            const proses = data.filter(function (item) {
+                return normalizeStatus(item.status) === 'proses';
+            }).length;
+
+            const selesai = data.filter(function (item) {
+                return normalizeStatus(item.status) === 'selesai';
+            }).length;
 
             statTotal.innerText = total;
             statPending.innerText = pending;
@@ -869,7 +916,7 @@
             statSelesai.innerText = selesai;
         };
 
-        const renderLatest = (data) => {
+        const renderLatest = function (data) {
             if (!Array.isArray(data) || data.length === 0) {
                 latestBody.innerHTML = `
                     <tr>
@@ -878,12 +925,13 @@
                         </td>
                     </tr>
                 `;
+
                 return;
             }
 
             const latest = data.slice(0, 5);
 
-            latestBody.innerHTML = latest.map(item => {
+            latestBody.innerHTML = latest.map(function (item) {
                 const status = normalizeStatus(item.status);
 
                 const pelapor = item.user
@@ -891,11 +939,19 @@
                     : 'Masyarakat';
 
                 const desa = item.desa
-                    ? safeText(item.desa.nama_desa || item.desa.name, 'Desa tidak tersedia')
+                    ? safeText(
+                        item.desa.nama_desa || item.desa.name,
+                        'Desa tidak tersedia'
+                    )
                     : 'Desa tidak tersedia';
 
-                const lokasi = safeText(item.lokasi_spesifik, 'Lokasi belum tersedia');
+                const lokasi = safeText(
+                    item.lokasi_spesifik,
+                    'Lokasi belum tersedia'
+                );
+
                 const deskripsiFull = safeText(item.deskripsi, '-');
+
                 const deskripsi = deskripsiFull.length > 55
                     ? deskripsiFull.substring(0, 55) + '...'
                     : deskripsiFull;
@@ -905,7 +961,16 @@
                     : (item.foto ? `/storage/${item.foto}` : null);
 
                 const fotoHtml = fotoUrl
-                    ? `<a href="${escapeHtml(fotoUrl)}" target="_blank" class="admin-photo-link">Lihat Foto</a>`
+                    ? `
+                        <a
+                            href="${escapeHtml(fotoUrl)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="admin-photo-link"
+                        >
+                            Lihat Foto
+                        </a>
+                    `
                     : '-';
 
                 return `
@@ -915,13 +980,18 @@
                         <td>${escapeHtml(lokasi)}</td>
                         <td>${escapeHtml(deskripsi)}</td>
                         <td>${fotoHtml}</td>
+
                         <td>
                             <span class="admin-status ${status}">
                                 ${statusLabel(status)}
                             </span>
                         </td>
+
                         <td>
-                            <a href="{{ route('admin.pengaduan.index') }}" class="admin-mini-link">
+                            <a
+                                href="{{ route('admin.pengaduan.index') }}"
+                                class="admin-mini-link"
+                            >
                                 Kelola
                             </a>
                         </td>
@@ -937,29 +1007,47 @@
                 'Accept': 'application/json'
             }
         })
-        .then(async response => {
-            const data = await response.json();
+        .then(async function (response) {
+            let data;
+
+            try {
+                data = await response.json();
+            } catch (error) {
+                throw new Error('Respons API tidak valid.');
+            }
+
+            if (response.status === 401 || response.status === 403) {
+                clearSessionAndRedirect(
+                    'Sesi login admin tidak valid. Silakan login kembali.'
+                );
+
+                return;
+            }
 
             if (!response.ok) {
-                throw data;
+                throw new Error(
+                    data.message ||
+                    'Gagal mengambil data pengaduan.'
+                );
             }
 
             return data;
         })
-        .then(data => {
+        .then(function (data) {
+            if (!data) {
+                return;
+            }
+
             if (!Array.isArray(data)) {
+                resetStats();
+
                 latestBody.innerHTML = `
                     <tr>
                         <td colspan="7" class="admin-empty">
-                            Response API tidak valid.
+                            Respons API pengaduan tidak valid.
                         </td>
                     </tr>
                 `;
-
-                statTotal.innerText = 0;
-                statPending.innerText = 0;
-                statProses.innerText = 0;
-                statSelesai.innerText = 0;
 
                 return;
             }
@@ -967,18 +1055,18 @@
             setStatsFromList(data);
             renderLatest(data);
         })
-        .catch(error => {
+        .catch(function (error) {
             console.error('Error ambil data pengaduan:', error);
 
-            statTotal.innerText = 0;
-            statPending.innerText = 0;
-            statProses.innerText = 0;
-            statSelesai.innerText = 0;
+            resetStats();
 
             latestBody.innerHTML = `
                 <tr>
                     <td colspan="7" class="admin-empty">
-                        Gagal memuat data laporan. Cek route /api/admin/pengaduan atau token admin.
+                        ${escapeHtml(
+                            error.message ||
+                            'Gagal memuat data laporan.'
+                        )}
                     </td>
                 </tr>
             `;

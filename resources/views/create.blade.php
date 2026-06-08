@@ -2,6 +2,14 @@
 
 @section('content')
 
+{{-- Leaflet CSS --}}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIINfQ3h8mW9nC7Wq7A6QeV9z1mG8fN5Y0M="
+    crossorigin=""
+>
+
 <style>
     :root {
         --report-bg: #f6f8f3;
@@ -77,7 +85,7 @@
 
     .report-layout {
         display: grid;
-        grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1.14fr);
+        grid-template-columns: minmax(0, 0.82fr) minmax(450px, 1.18fr);
         gap: 22px;
         align-items: start;
     }
@@ -114,7 +122,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, rgba(7, 18, 11, 0.05), rgba(7, 18, 11, 0.58));
+        background: linear-gradient(
+            180deg,
+            rgba(7, 18, 11, 0.05),
+            rgba(7, 18, 11, 0.58)
+        );
     }
 
     .report-visual-badge {
@@ -379,6 +391,164 @@
         font-weight: 600;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Map Picker
+    |--------------------------------------------------------------------------
+    */
+
+    .report-map-card {
+        padding: 14px;
+        border-radius: 24px;
+        background: #f8faf6;
+        border: 1px solid rgba(16, 32, 24, 0.10);
+    }
+
+    .report-map-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .report-location-btn {
+        min-height: 44px;
+        padding: 0 15px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        border-radius: 14px;
+        background: var(--report-green);
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 900;
+        transition: 0.22s ease;
+        box-shadow: 0 10px 22px rgba(22, 167, 101, 0.20);
+    }
+
+    .report-location-btn:hover {
+        transform: translateY(-1px);
+        background: var(--report-green-dark);
+    }
+
+    .report-location-btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .report-location-status {
+        min-height: 34px;
+        padding: 0 11px;
+        border-radius: 999px;
+        background: #eef2ee;
+        color: var(--report-muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .report-location-status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #94a3b8;
+    }
+
+    .report-location-status.selected {
+        color: var(--report-green-dark);
+        background: var(--report-green-soft);
+    }
+
+    .report-location-status.selected::before {
+        background: var(--report-green);
+        box-shadow: 0 0 0 4px rgba(22, 167, 101, 0.12);
+    }
+
+    #report-map {
+        width: 100%;
+        height: 360px;
+        border-radius: 19px;
+        overflow: hidden;
+        background: #dfe9df;
+        border: 1px solid rgba(16, 32, 24, 0.10);
+        z-index: 1;
+    }
+
+    .report-coordinate-grid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .report-coordinate-box {
+        min-width: 0;
+        padding: 11px 12px;
+        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid rgba(16, 32, 24, 0.08);
+    }
+
+    .report-coordinate-box span {
+        display: block;
+        color: var(--report-muted);
+        font-size: 9px;
+        font-weight: 950;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .report-coordinate-box strong {
+        display: block;
+        margin-top: 5px;
+        color: var(--report-dark);
+        font-size: 12px;
+        font-weight: 850;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .report-map-pin {
+        width: 42px;
+        height: 42px;
+        border-radius: 50% 50% 50% 0;
+        background: var(--report-green);
+        border: 4px solid #ffffff;
+        box-shadow: 0 8px 22px rgba(16, 32, 24, 0.30);
+        transform: rotate(-45deg);
+        position: relative;
+    }
+
+    .report-map-pin::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #ffffff;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Upload Foto
+    |--------------------------------------------------------------------------
+    */
+
     .report-upload {
         position: relative;
         min-height: 230px;
@@ -475,7 +645,7 @@
         min-height: 36px;
         padding: 0 13px;
         border-radius: 999px;
-        background: rgba(0,0,0,0.55);
+        background: rgba(0, 0, 0, 0.55);
         color: #ffffff;
         backdrop-filter: blur(10px);
         font-size: 11px;
@@ -488,6 +658,12 @@
     .report-upload.has-preview .report-preview-change {
         display: inline-flex;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Submit
+    |--------------------------------------------------------------------------
+    */
 
     .report-submit-row {
         display: flex;
@@ -643,6 +819,29 @@
             border-radius: 15px;
         }
 
+        .report-map-toolbar {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .report-location-btn,
+        .report-location-status {
+            width: 100%;
+        }
+
+        .report-location-status {
+            justify-content: center;
+        }
+
+        #report-map {
+            height: 290px;
+            border-radius: 17px;
+        }
+
+        .report-coordinate-grid {
+            grid-template-columns: 1fr;
+        }
+
         .report-upload {
             min-height: 200px;
             border-radius: 20px;
@@ -684,33 +883,46 @@
 
                 <div class="report-info-body">
                     <h2>Laporkan titik sampah liar dengan data yang jelas.</h2>
+
                     <p>
-                        Pastikan desa, lokasi spesifik, deskripsi kondisi, dan foto bukti diisi dengan benar
-                        agar petugas lebih mudah melakukan verifikasi.
+                        Pilih desa, tentukan titik pada peta, tulis patokan lokasi,
+                        jelaskan kondisi sampah, dan upload foto bukti.
                     </p>
 
                     <div class="report-steps">
                         <div class="report-step">
                             <div class="report-step-icon">1</div>
+
                             <div>
                                 <strong>Pilih wilayah laporan</strong>
-                                <span>Tentukan desa/kelurahan, lalu tulis patokan jalan di lokasi spesifik.</span>
+
+                                <span>
+                                    Tentukan desa atau kelurahan lokasi sampah liar.
+                                </span>
                             </div>
                         </div>
 
                         <div class="report-step">
                             <div class="report-step-icon">2</div>
+
                             <div>
-                                <strong>Jelaskan kondisi lapangan</strong>
-                                <span>Tulis lokasi spesifik dan deskripsi agar laporan mudah dipahami.</span>
+                                <strong>Tentukan titik pada peta</strong>
+
+                                <span>
+                                    Gunakan lokasi perangkat, klik peta, atau geser pin.
+                                </span>
                             </div>
                         </div>
 
                         <div class="report-step">
                             <div class="report-step-icon">3</div>
+
                             <div>
-                                <strong>Upload foto bukti</strong>
-                                <span>Gunakan foto yang jelas sebagai dokumentasi kondisi sampah.</span>
+                                <strong>Lengkapi bukti laporan</strong>
+
+                                <span>
+                                    Tulis patokan, deskripsi kondisi, dan upload foto.
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -724,34 +936,106 @@
                     <h1>Buat Pengaduan Sampah</h1>
 
                     <p>
-                        Isi data laporan dengan lengkap. Laporan yang dikirim akan masuk ke sistem
-                        E-SAPO untuk dipantau dan ditindaklanjuti.
+                        Tentukan titik lokasi sampah secara akurat agar petugas
+                        lebih mudah menemukan dan menindaklanjuti laporan.
                     </p>
                 </div>
 
                 <div id="form-alert" class="report-alert"></div>
 
-                <form id="form-pengaduan" enctype="multipart/form-data" class="report-form">
+                <form
+                    id="form-pengaduan"
+                    enctype="multipart/form-data"
+                    class="report-form"
+                >
                     <div class="report-field">
-    <label for="desa_id">Desa / Kelurahan</label>
+                        <label for="desa_id">Desa / Kelurahan</label>
 
-    <div class="report-input-wrap">
-        <span class="report-input-icon">🏘️</span>
+                        <div class="report-input-wrap">
+                            <span class="report-input-icon">🏘️</span>
 
-        <select id="desa_id" name="desa_id" required class="report-select">
-            <option value="">Pilih Desa / Kelurahan</option>
-        </select>
+                            <select
+                                id="desa_id"
+                                name="desa_id"
+                                required
+                                class="report-select"
+                            >
+                                <option value="">
+                                    Pilih Desa / Kelurahan
+                                </option>
+                            </select>
 
-        <span class="report-select-arrow">▼</span>
-    </div>
+                            <span class="report-select-arrow">▼</span>
+                        </div>
 
-    <span class="report-help">
-        Pilih desa/kelurahan lokasi utama aduan. Detail RT/RW atau patokan jalan tulis di lokasi spesifik.
-    </span>
-</div>
+                        <span class="report-help">
+                            Pilih desa atau kelurahan lokasi utama laporan.
+                        </span>
+                    </div>
 
                     <div class="report-field">
-                        <label for="lokasi_spesifik">Lokasi Spesifik</label>
+                        <label>Pilih Titik Lokasi Sampah pada Peta</label>
+
+                        <div class="report-map-card">
+                            <div class="report-map-toolbar">
+                                <button
+                                    type="button"
+                                    id="use-my-location"
+                                    class="report-location-btn"
+                                >
+                                    📍 Gunakan Lokasi Saya
+                                </button>
+
+                                <div
+                                    id="location-status"
+                                    class="report-location-status"
+                                >
+                                    Titik Belum Dipilih
+                                </div>
+                            </div>
+
+                            <div id="report-map"></div>
+
+                            <div class="report-coordinate-grid">
+                                <div class="report-coordinate-box">
+                                    <span>Latitude</span>
+
+                                    <strong id="latitude-text">
+                                        Belum dipilih
+                                    </strong>
+                                </div>
+
+                                <div class="report-coordinate-box">
+                                    <span>Longitude</span>
+
+                                    <strong id="longitude-text">
+                                        Belum dipilih
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input
+                            type="hidden"
+                            id="latitude"
+                            name="latitude"
+                        >
+
+                        <input
+                            type="hidden"
+                            id="longitude"
+                            name="longitude"
+                        >
+
+                        <span class="report-help">
+                            Klik peta atau geser pin ke titik sampah yang sebenarnya.
+                        </span>
+                    </div>
+
+                    <div class="report-field">
+                        <label for="lokasi_spesifik">
+                            Lokasi Spesifik / Patokan
+                        </label>
 
                         <div class="report-input-wrap">
                             <span class="report-input-icon">🧭</span>
@@ -761,16 +1045,20 @@
                                 id="lokasi_spesifik"
                                 name="lokasi_spesifik"
                                 required
-                                placeholder="Contoh: Jl. Merdeka No. 12, sebelah warung"
+                                placeholder="Contoh: Sebelah warung biru, dekat jembatan"
                                 class="report-input"
                             >
                         </div>
 
-                        <span class="report-help">Tuliskan patokan lokasi agar petugas mudah menemukan titik sampah.</span>
+                        <span class="report-help">
+                            Tuliskan patokan tambahan agar petugas mudah menemukan lokasi.
+                        </span>
                     </div>
 
                     <div class="report-field">
-                        <label for="deskripsi">Deskripsi Kondisi Sampah</label>
+                        <label for="deskripsi">
+                            Deskripsi Kondisi Sampah
+                        </label>
 
                         <textarea
                             id="deskripsi"
@@ -781,7 +1069,9 @@
                             class="report-textarea"
                         ></textarea>
 
-                        <span class="report-help">Semakin jelas deskripsi, semakin mudah laporan diverifikasi.</span>
+                        <span class="report-help">
+                            Semakin jelas deskripsi, semakin mudah laporan diverifikasi.
+                        </span>
                     </div>
 
                     <div class="report-field">
@@ -796,13 +1086,24 @@
                                 required
                             >
 
-                            <div id="preview-text" class="report-upload-content">
+                            <div class="report-upload-content">
                                 <div class="report-upload-icon">📸</div>
-                                <strong>Klik untuk upload foto bukti</strong>
-                                <span>Format PNG, JPG, atau JPEG. Maksimal 2MB agar proses upload lebih ringan.</span>
+
+                                <strong>
+                                    Klik untuk upload foto bukti
+                                </strong>
+
+                                <span>
+                                    Format PNG, JPG, atau JPEG. Maksimal 2MB.
+                                </span>
                             </div>
 
-                            <img id="image-preview" class="report-preview" src="#" alt="Preview Foto">
+                            <img
+                                id="image-preview"
+                                class="report-preview"
+                                src="#"
+                                alt="Preview Foto"
+                            >
 
                             <div class="report-preview-change">
                                 Ganti Foto
@@ -811,12 +1112,19 @@
                     </div>
 
                     <div class="report-submit-row">
-                        <button type="submit" id="submit-btn" class="report-submit-btn">
+                        <button
+                            type="submit"
+                            id="submit-btn"
+                            class="report-submit-btn"
+                        >
                             <span>Kirim Laporan</span>
                             <b>→</b>
                         </button>
 
-                        <a href="{{ route('home') }}" class="report-back-link">
+                        <a
+                            href="{{ route('home') }}"
+                            class="report-back-link"
+                        >
                             Batal
                         </a>
                     </div>
@@ -830,8 +1138,22 @@
 @endsection
 
 @push('scripts')
+
+{{-- Leaflet JavaScript --}}
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Element
+        |--------------------------------------------------------------------------
+        */
+
         const desaSelect = document.getElementById('desa_id');
         const fotoInput = document.getElementById('foto-input');
         const uploadBox = document.getElementById('upload-box');
@@ -840,46 +1162,243 @@
         const alertBox = document.getElementById('form-alert');
         const submitBtn = document.getElementById('submit-btn');
 
-        const token = localStorage.getItem('access_token');
-        const role = localStorage.getItem('user_role');
+        const useMyLocationBtn = document.getElementById('use-my-location');
+        const locationStatus = document.getElementById('location-status');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+        const latitudeText = document.getElementById('latitude-text');
+        const longitudeText = document.getElementById('longitude-text');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Session Login
+        |--------------------------------------------------------------------------
+        */
+
+        const token = sessionStorage.getItem('access_token');
+        const role = sessionStorage.getItem('user_role');
+
+        const clearSessionAndRedirect = function (message) {
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('user_role');
+            sessionStorage.removeItem('user_name');
+
+            if (message) {
+                alert(message);
+            }
+
+            window.location.href = "{{ route('login') }}";
+        };
 
         if (!token) {
-            alert('Silakan login terlebih dahulu.');
-            window.location.href = '/login';
+            clearSessionAndRedirect('Silakan login terlebih dahulu.');
             return;
         }
 
         if (role !== 'masyarakat') {
             alert('Halaman buat aduan hanya untuk masyarakat.');
-            window.location.href = '/admin/dashboard';
+            window.location.href = "{{ route('admin.dashboard') }}";
             return;
         }
 
-        const showAlert = (message, type = 'error') => {
+        /*
+        |--------------------------------------------------------------------------
+        | Alert
+        |--------------------------------------------------------------------------
+        */
+
+        const showAlert = function (message, type = 'error') {
             alertBox.textContent = message;
             alertBox.className = `report-alert show ${type}`;
+
             alertBox.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center'
             });
         };
 
-        const clearAlert = () => {
+        const clearAlert = function () {
             alertBox.textContent = '';
             alertBox.className = 'report-alert';
         };
 
-        const setSubmitLoading = (isLoading) => {
+        const setSubmitLoading = function (isLoading) {
             submitBtn.disabled = isLoading;
+
             submitBtn.innerHTML = isLoading
                 ? '<span>Mengirim Laporan...</span>'
                 : '<span>Kirim Laporan</span><b>→</b>';
         };
 
-        const loadDesa = () => {
+        /*
+        |--------------------------------------------------------------------------
+        | Leaflet Map
+        |--------------------------------------------------------------------------
+        */
+
+        const defaultLocation = [-6.1783, 106.6319];
+
+        const map = L.map('report-map', {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView(defaultLocation, 13);
+
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }
+        ).addTo(map);
+
+        const customPin = L.divIcon({
+            className: '',
+            html: '<div class="report-map-pin"></div>',
+            iconSize: [42, 42],
+            iconAnchor: [21, 42]
+        });
+
+        const marker = L.marker(defaultLocation, {
+            draggable: true,
+            icon: customPin
+        }).addTo(map);
+
+        const resetMapLocation = function () {
+            latitudeInput.value = '';
+            longitudeInput.value = '';
+
+            latitudeText.textContent = 'Belum dipilih';
+            longitudeText.textContent = 'Belum dipilih';
+
+            locationStatus.textContent = 'Titik Belum Dipilih';
+            locationStatus.classList.remove('selected');
+
+            marker.setLatLng(defaultLocation);
+            map.setView(defaultLocation, 13);
+        };
+
+        const setMapLocation = function (latitude, longitude, zoom = 18) {
+            const lat = Number(latitude);
+            const lng = Number(longitude);
+
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+                showAlert('Koordinat lokasi tidak valid.');
+                return;
+            }
+
+            const fixedLat = lat.toFixed(7);
+            const fixedLng = lng.toFixed(7);
+
+            latitudeInput.value = fixedLat;
+            longitudeInput.value = fixedLng;
+
+            latitudeText.textContent = fixedLat;
+            longitudeText.textContent = fixedLng;
+
+            locationStatus.textContent = 'Titik Lokasi Dipilih';
+            locationStatus.classList.add('selected');
+
+            marker.setLatLng([lat, lng]);
+            map.setView([lat, lng], zoom);
+        };
+
+        map.on('click', function (event) {
             clearAlert();
 
-            desaSelect.innerHTML = '<option value="">Memuat data desa...</option>';
+            setMapLocation(
+                event.latlng.lat,
+                event.latlng.lng,
+                map.getZoom()
+            );
+        });
+
+        marker.on('dragend', function () {
+            clearAlert();
+
+            const position = marker.getLatLng();
+
+            setMapLocation(
+                position.lat,
+                position.lng,
+                map.getZoom()
+            );
+        });
+
+        useMyLocationBtn.addEventListener('click', function () {
+            clearAlert();
+
+            if (!navigator.geolocation) {
+                showAlert(
+                    'Browser Anda tidak mendukung fitur lokasi perangkat.'
+                );
+
+                return;
+            }
+
+            useMyLocationBtn.disabled = true;
+            useMyLocationBtn.textContent = 'Mencari Lokasi...';
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    setMapLocation(
+                        position.coords.latitude,
+                        position.coords.longitude,
+                        18
+                    );
+
+                    useMyLocationBtn.disabled = false;
+                    useMyLocationBtn.textContent = '📍 Gunakan Lokasi Saya';
+                },
+                function (error) {
+                    console.error('Geolocation Error:', error);
+
+                    let message = 'Gagal mengambil lokasi perangkat.';
+
+                    if (error.code === error.PERMISSION_DENIED) {
+                        message =
+                            'Izin lokasi ditolak. Aktifkan izin lokasi pada browser.';
+                    }
+
+                    if (error.code === error.POSITION_UNAVAILABLE) {
+                        message =
+                            'Lokasi perangkat tidak tersedia. Coba klik titik pada peta.';
+                    }
+
+                    if (error.code === error.TIMEOUT) {
+                        message =
+                            'Pengambilan lokasi terlalu lama. Coba kembali atau klik titik pada peta.';
+                    }
+
+                    showAlert(message);
+
+                    useMyLocationBtn.disabled = false;
+                    useMyLocationBtn.textContent = '📍 Gunakan Lokasi Saya';
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
+                }
+            );
+        });
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 250);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Load Desa
+        |--------------------------------------------------------------------------
+        */
+
+        const loadDesa = function () {
+            clearAlert();
+
+            desaSelect.innerHTML =
+                '<option value="">Memuat data desa...</option>';
+
             desaSelect.disabled = true;
 
             fetch('/api/desa', {
@@ -888,43 +1407,77 @@
                     'Accept': 'application/json'
                 }
             })
-            .then(async response => {
-                const data = await response.json();
+            .then(async function (response) {
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch (error) {
+                    throw new Error('Respons data desa tidak valid.');
+                }
 
                 if (!response.ok) {
-                    throw data;
+                    throw new Error(
+                        data.message ||
+                        'Gagal memuat data desa.'
+                    );
                 }
 
                 return data;
             })
-            .then(data => {
-                desaSelect.innerHTML = '<option value="">Pilih Desa / Kelurahan</option>';
+            .then(function (data) {
+                desaSelect.innerHTML =
+                    '<option value="">Pilih Desa / Kelurahan</option>';
 
                 if (!Array.isArray(data)) {
-                    showAlert('Data desa tidak valid. Cek response API /api/desa.');
+                    showAlert(
+                        'Data desa tidak valid. Cek response API /api/desa.'
+                    );
+
                     return;
                 }
 
                 if (data.length === 0) {
-                    showAlert('Data desa masih kosong. Isi dulu tabel desas di database.');
+                    showAlert(
+                        'Data desa masih kosong. Isi tabel desas di database.'
+                    );
+
                     return;
                 }
 
-                data.forEach(desa => {
+                data.forEach(function (desa) {
                     const option = document.createElement('option');
+
                     option.value = desa.id;
-                    option.textContent = desa.nama_desa || desa.name || 'Nama desa tidak tersedia';
+
+                    option.textContent =
+                        desa.nama_desa ||
+                        desa.name ||
+                        'Nama desa tidak tersedia';
+
                     desaSelect.appendChild(option);
                 });
 
                 desaSelect.disabled = false;
             })
-            .catch(error => {
+            .catch(function (error) {
                 console.error('Error load desa:', error);
-                desaSelect.innerHTML = '<option value="">Gagal memuat desa</option>';
-                showAlert(error.message || 'Gagal memuat data desa. Cek route /api/desa dan database.');
+
+                desaSelect.innerHTML =
+                    '<option value="">Gagal memuat desa</option>';
+
+                showAlert(
+                    error.message ||
+                    'Gagal memuat data desa.'
+                );
             });
         };
+
+        /*
+        |--------------------------------------------------------------------------
+        | Preview Foto
+        |--------------------------------------------------------------------------
+        */
 
         fotoInput.addEventListener('change', function () {
             clearAlert();
@@ -934,25 +1487,39 @@
             if (!file) {
                 uploadBox.classList.remove('has-preview');
                 imagePreview.src = '#';
+
                 return;
             }
 
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            const allowedTypes = [
+                'image/jpeg',
+                'image/jpg',
+                'image/png'
+            ];
+
             const maxSize = 2 * 1024 * 1024;
 
             if (!allowedTypes.includes(file.type)) {
                 this.value = '';
+
                 uploadBox.classList.remove('has-preview');
                 imagePreview.src = '#';
-                showAlert('Format foto harus PNG, JPG, atau JPEG.');
+
+                showAlert(
+                    'Format foto harus PNG, JPG, atau JPEG.'
+                );
+
                 return;
             }
 
             if (file.size > maxSize) {
                 this.value = '';
+
                 uploadBox.classList.remove('has-preview');
                 imagePreview.src = '#';
+
                 showAlert('Ukuran foto maksimal 2MB.');
+
                 return;
             }
 
@@ -966,35 +1533,69 @@
             reader.readAsDataURL(file);
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | Submit Pengaduan
+        |--------------------------------------------------------------------------
+        */
+
         form.addEventListener('submit', function (event) {
             event.preventDefault();
+
             clearAlert();
+
+            const lokasi = document
+                .getElementById('lokasi_spesifik')
+                .value
+                .trim();
+
+            const deskripsi = document
+                .getElementById('deskripsi')
+                .value
+                .trim();
+
+            const latitude = latitudeInput.value.trim();
+            const longitude = longitudeInput.value.trim();
+            const foto = fotoInput.files[0];
 
             if (!desaSelect.value) {
                 showAlert('Pilih desa terlebih dahulu.');
                 return;
             }
 
-            const lokasi = document.getElementById('lokasi_spesifik').value.trim();
-            const deskripsi = document.getElementById('deskripsi').value.trim();
-            const foto = fotoInput.files[0];
+            if (!latitude || !longitude) {
+                showAlert(
+                    'Pilih titik lokasi sampah pada peta terlebih dahulu.'
+                );
+
+                return;
+            }
 
             if (!lokasi) {
-                showAlert('Lokasi spesifik wajib diisi.');
+                showAlert(
+                    'Lokasi spesifik atau patokan wajib diisi.'
+                );
+
                 return;
             }
 
             if (!deskripsi) {
-                showAlert('Deskripsi kondisi sampah wajib diisi.');
+                showAlert(
+                    'Deskripsi kondisi sampah wajib diisi.'
+                );
+
                 return;
             }
 
             if (!foto) {
-                showAlert('Foto bukti sampah wajib diupload.');
+                showAlert(
+                    'Foto bukti sampah wajib diupload.'
+                );
+
                 return;
             }
 
-            const formData = new FormData(this);
+            const formData = new FormData(form);
 
             setSubmitLoading(true);
 
@@ -1006,43 +1607,81 @@
                 },
                 body: formData
             })
-            .then(async response => {
-                const data = await response.json();
+            .then(async function (response) {
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch (error) {
+                    throw new Error('Respons server tidak valid.');
+                }
+
+                if (response.status === 401 || response.status === 403) {
+                    clearSessionAndRedirect(
+                        'Sesi login tidak valid. Silakan login kembali.'
+                    );
+
+                    return;
+                }
 
                 if (!response.ok) {
-                    throw data;
+                    const validationMessage = data.errors
+                        ? Object.values(data.errors)[0][0]
+                        : null;
+
+                    throw new Error(
+                        validationMessage ||
+                        data.message ||
+                        'Gagal mengirim pengaduan.'
+                    );
                 }
 
                 return data;
             })
-            .then(data => {
-                showAlert(data.message || 'Pengaduan berhasil terkirim.', 'success');
-
-                form.reset();
-                uploadBox.classList.remove('has-preview');
-                imagePreview.src = '#';
-
-                setTimeout(() => {
-                    window.location.href = '/masyarakat/dashboard';
-                }, 1000);
-            })
-            .catch(error => {
-                console.error('Error submit pengaduan:', error);
-
-                if (error.errors) {
-                    const firstError = Object.values(error.errors)[0][0];
-                    showAlert(firstError || 'Validasi gagal. Periksa kembali data yang Anda isi.');
+            .then(function (data) {
+                if (!data) {
                     return;
                 }
 
-                showAlert(error.message || 'Terjadi kesalahan saat mengirim pengaduan. Cek controller dan database.');
+                showAlert(
+                    data.message ||
+                    'Pengaduan berhasil terkirim.',
+                    'success'
+                );
+
+                form.reset();
+
+                uploadBox.classList.remove('has-preview');
+                imagePreview.src = '#';
+
+                resetMapLocation();
+
+                setTimeout(function () {
+                    window.location.href = "{{ route('home') }}";
+                }, 1200);
             })
-            .finally(() => {
+            .catch(function (error) {
+                console.error('Error submit pengaduan:', error);
+
+                showAlert(
+                    error.message ||
+                    'Terjadi kesalahan saat mengirim pengaduan.'
+                );
+            })
+            .finally(function () {
                 setSubmitLoading(false);
             });
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | Jalankan Saat Halaman Dibuka
+        |--------------------------------------------------------------------------
+        */
+
+        resetMapLocation();
         loadDesa();
     });
 </script>
+
 @endpush

@@ -3,80 +3,69 @@
 @section('content')
 
 {{-- ============================================================
-     E-SAPO — Upgraded UI
-     Font: Sora (display) + DM Sans (body)
-     Theme: Natural Civic — earthy green, warm cream, confident
-     ============================================================ --}}
+    E-SAPO — Dashboard Masyarakat Premium
+    Dashboard dibuat lebih ramai, lengkap, dan responsif
+    ============================================================ --}}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   TOKENS
-   ============================================================ */
 :root {
-    /* Palette */
-    --c-bg:         #f4f6f1;
-    --c-bg-warm:    #ede9e0;
-    --c-surface:    #ffffff;
-    --c-surface-2:  #f9faf6;
-    --c-ink:        #0f1f16;
-    --c-ink-2:      #1b2e21;
-    --c-muted:      #5e7166;
-    --c-subtle:     #8fa396;
-    --c-line:       rgba(15, 31, 22, 0.09);
+    --c-bg: #f4f6f1;
+    --c-bg-2: #eef3ea;
+    --c-surface: #ffffff;
+    --c-surface-2: #f9faf6;
+    --c-ink: #0f1f16;
+    --c-ink-2: #1b2e21;
+    --c-muted: #5e7166;
+    --c-subtle: #8fa396;
+    --c-line: rgba(15, 31, 22, 0.09);
 
-    /* Brand */
-    --c-green:      #1daa6d;
-    --c-green-dk:   #0e7a4a;
-    --c-green-lt:   #e2f7ed;
-    --c-green-glow: rgba(29, 170, 109, 0.18);
+    --c-green: #1daa6d;
+    --c-green-dk: #0e7a4a;
+    --c-green-lt: #e2f7ed;
+    --c-green-soft: rgba(29, 170, 109, 0.12);
 
-    /* Status */
-    --c-amber:      #e8a020;
-    --c-amber-lt:   #fef3d0;
-    --c-amber-dk:   #7a4d05;
-    --c-blue:       #2b7de9;
-    --c-blue-lt:    #deeeff;
-    --c-blue-dk:    #0c4a8d;
-    --c-teal:       #0f8a6a;
-    --c-teal-lt:    #d6f5eb;
-    --c-teal-dk:    #064d3a;
+    --c-amber: #e8a020;
+    --c-amber-lt: #fff5d9;
+    --c-blue: #2b7de9;
+    --c-blue-lt: #e4f1ff;
+    --c-teal: #0f8a6a;
+    --c-teal-lt: #d6f5eb;
+    --c-red: #e05252;
+    --c-red-lt: #fff0f0;
 
-    /* Elevation */
-    --shadow-sm:    0 2px 8px rgba(15,31,22,0.06), 0 1px 2px rgba(15,31,22,0.04);
-    --shadow-md:    0 8px 28px rgba(15,31,22,0.09), 0 2px 8px rgba(15,31,22,0.05);
-    --shadow-lg:    0 20px 56px rgba(15,31,22,0.12), 0 4px 12px rgba(15,31,22,0.06);
-    --shadow-xl:    0 30px 80px rgba(15,31,22,0.15), 0 8px 24px rgba(15,31,22,0.08);
+    --shadow-sm: 0 2px 8px rgba(15,31,22,0.06), 0 1px 2px rgba(15,31,22,0.04);
+    --shadow-md: 0 8px 28px rgba(15,31,22,0.09), 0 2px 8px rgba(15,31,22,0.05);
+    --shadow-lg: 0 20px 56px rgba(15,31,22,0.12), 0 4px 12px rgba(15,31,22,0.06);
+    --shadow-xl: 0 30px 80px rgba(15,31,22,0.15), 0 8px 24px rgba(15,31,22,0.08);
 
-    /* Radii */
-    --r-xs:  8px;
-    --r-sm:  14px;
-    --r-md:  20px;
-    --r-lg:  28px;
-    --r-xl:  38px;
-    --r-2xl: 50px;
+    --r-xs: 8px;
+    --r-sm: 14px;
+    --r-md: 20px;
+    --r-lg: 28px;
+    --r-xl: 38px;
 
-    /* Typography */
     --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
-    --font-body:    'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
-    /* Motion */
-    --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ============================================================
-   RESET + BASE
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-/* ============================================================
-   PAGE SHELL
-   ============================================================ */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
 .ep {
     width: 100%;
     min-height: 100vh;
@@ -86,44 +75,12 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     overflow-x: hidden;
     color: var(--c-ink);
     font-family: var(--font-body);
-    background: var(--c-bg);
+    background:
+        radial-gradient(circle at 8% 8%, rgba(29,170,109,0.13), transparent 26%),
+        radial-gradient(circle at 92% 12%, rgba(232,160,32,0.10), transparent 24%),
+        linear-gradient(180deg, #fbfcf8 0%, var(--c-bg) 52%, #eef3ea 100%);
 }
 
-/* Ambient blobs */
-.ep-blob {
-    position: absolute;
-    border-radius: 999px;
-    pointer-events: none;
-    filter: blur(90px);
-    z-index: 0;
-    animation: blobDrift 14s ease-in-out infinite alternate;
-}
-.ep-blob-1 {
-    width: 480px; height: 480px;
-    top: -120px; left: -160px;
-    background: radial-gradient(circle, rgba(29,170,109,0.13) 0%, transparent 70%);
-    animation-duration: 16s;
-}
-.ep-blob-2 {
-    width: 420px; height: 420px;
-    top: 60px; right: -180px;
-    background: radial-gradient(circle, rgba(232,160,32,0.10) 0%, transparent 70%);
-    animation-duration: 20s;
-    animation-delay: -5s;
-}
-.ep-blob-3 {
-    width: 360px; height: 360px;
-    bottom: 200px; left: 20%;
-    background: radial-gradient(circle, rgba(29,170,109,0.08) 0%, transparent 70%);
-    animation-duration: 18s;
-    animation-delay: -8s;
-}
-@keyframes blobDrift {
-    0%   { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(30px, 20px) scale(1.06); }
-}
-
-/* Grain overlay */
 .ep::after {
     content: '';
     position: fixed;
@@ -135,6 +92,46 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     background-size: 180px;
 }
 
+.ep-blob {
+    position: absolute;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(90px);
+    z-index: 0;
+    animation: blobDrift 14s ease-in-out infinite alternate;
+}
+
+.ep-blob-1 {
+    width: 480px;
+    height: 480px;
+    top: -120px;
+    left: -160px;
+    background: radial-gradient(circle, rgba(29,170,109,0.13) 0%, transparent 70%);
+}
+
+.ep-blob-2 {
+    width: 420px;
+    height: 420px;
+    top: 60px;
+    right: -180px;
+    background: radial-gradient(circle, rgba(232,160,32,0.10) 0%, transparent 70%);
+    animation-delay: -5s;
+}
+
+.ep-blob-3 {
+    width: 360px;
+    height: 360px;
+    bottom: 200px;
+    left: 20%;
+    background: radial-gradient(circle, rgba(29,170,109,0.08) 0%, transparent 70%);
+    animation-delay: -8s;
+}
+
+@keyframes blobDrift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(30px, 20px) scale(1.06); }
+}
+
 .ep-wrap {
     width: min(1180px, calc(100% - 40px));
     margin-inline: auto;
@@ -143,12 +140,83 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 
 /* ============================================================
-   HERO SECTION
-   ============================================================ */
+GLOBAL SECTION
+============================================================ */
+.ep-section {
+    margin-top: 28px;
+    position: relative;
+    z-index: 2;
+}
+
+.ep-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: var(--c-green-lt);
+    color: var(--c-green-dk);
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.ep-kicker::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--c-green);
+    box-shadow: 0 0 0 4px rgba(29,170,109,0.12);
+}
+
+.ep-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--c-line);
+    position: relative;
+}
+
+.ep-section-head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 64px;
+    height: 2px;
+    background: var(--c-green);
+    border-radius: 2px;
+}
+
+.ep-section-title {
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-size: clamp(24px, 2.6vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    color: var(--c-ink);
+    line-height: 1.1;
+}
+
+.ep-section-note {
+    max-width: 380px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--c-muted);
+    text-align: right;
+}
+
+/* ============================================================
+HERO
+============================================================ */
 .ep-hero {
     padding-top: 56px;
-    display: grid;
-    gap: 20px;
 }
 
 .ep-hero-top {
@@ -158,7 +226,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     align-items: stretch;
 }
 
-/* Intro card */
 .ep-intro {
     position: relative;
     border-radius: var(--r-xl);
@@ -174,27 +241,34 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     animation: fadeUp 0.7s var(--ease-out) both;
 }
 
-.ep-intro-deco {
+.ep-intro::before {
+    content: '';
     position: absolute;
-    pointer-events: none;
-}
-.ep-intro-deco-1 {
-    width: 320px; height: 320px;
-    right: -120px; top: -140px;
+    width: 320px;
+    height: 320px;
+    right: -120px;
+    top: -140px;
     border-radius: 999px;
     background: radial-gradient(circle, rgba(29,170,109,0.10) 0%, transparent 65%);
 }
-.ep-intro-deco-2 {
-    width: 200px; height: 200px;
-    left: -60px; bottom: -80px;
+
+.ep-intro::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    left: -60px;
+    bottom: -80px;
     border-radius: 999px;
     background: radial-gradient(circle, rgba(232,160,32,0.10) 0%, transparent 65%);
 }
-/* Grid lines deco */
-.ep-intro-deco-grid {
+
+.ep-intro-grid {
     position: absolute;
-    right: 0; top: 0;
-    width: 260px; height: 260px;
+    right: 0;
+    top: 0;
+    width: 260px;
+    height: 260px;
     opacity: 0.04;
     background-image:
         linear-gradient(var(--c-ink) 1px, transparent 1px),
@@ -203,10 +277,12 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     border-radius: 0 var(--r-xl) 0 0;
 }
 
-.ep-intro-top { position: relative; z-index: 2; }
-.ep-intro-bottom { position: relative; z-index: 2; }
+.ep-intro-top,
+.ep-intro-bottom {
+    position: relative;
+    z-index: 2;
+}
 
-/* Eyebrow badge */
 .ep-badge {
     display: inline-flex;
     align-items: center;
@@ -218,10 +294,11 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     color: var(--c-green-dk);
     font-family: var(--font-display);
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
 }
+
 .ep-badge-dot {
     width: 7px;
     height: 7px;
@@ -230,9 +307,10 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     box-shadow: 0 0 0 3px rgba(29,170,109,0.20), 0 0 0 6px rgba(29,170,109,0.08);
     animation: pulse 2.2s ease-in-out infinite;
 }
+
 @keyframes pulse {
     0%, 100% { box-shadow: 0 0 0 3px rgba(29,170,109,0.20), 0 0 0 6px rgba(29,170,109,0.08); }
-    50%       { box-shadow: 0 0 0 5px rgba(29,170,109,0.14), 0 0 0 10px rgba(29,170,109,0.04); }
+    50% { box-shadow: 0 0 0 5px rgba(29,170,109,0.14), 0 0 0 10px rgba(29,170,109,0.04); }
 }
 
 .ep-title {
@@ -244,18 +322,21 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     letter-spacing: -0.04em;
     color: var(--c-ink);
 }
+
 .ep-title em {
     font-style: normal;
     color: var(--c-green);
     position: relative;
     display: inline-block;
 }
-/* Underline accent on keyword */
+
 .ep-title em::after {
     content: '';
     position: absolute;
-    left: 0; bottom: -4px;
-    width: 100%; height: 3px;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 3px;
     border-radius: 4px;
     background: linear-gradient(90deg, var(--c-green), rgba(29,170,109,0.3));
 }
@@ -265,18 +346,17 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     font-size: 14.5px;
     line-height: 1.80;
     color: var(--c-muted);
-    font-weight: 400;
-    max-width: 560px;
+    max-width: 590px;
 }
 
 .ep-actions {
+    margin-top: 26px;
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
 }
 
-/* Buttons */
 .ep-btn {
     display: inline-flex;
     align-items: center;
@@ -288,44 +368,40 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     text-decoration: none;
     font-family: var(--font-display);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     transition: transform 0.22s var(--ease-spring), box-shadow 0.22s ease, background 0.18s ease;
     position: relative;
     overflow: hidden;
 }
-.ep-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0);
-    transition: background 0.18s ease;
+
+.ep-btn:hover {
+    transform: translateY(-2px);
 }
-.ep-btn:hover::after { background: rgba(255,255,255,0.07); }
-.ep-btn:hover { transform: translateY(-2px); }
-.ep-btn:active { transform: translateY(0); }
 
 .ep-btn-primary {
     background: var(--c-ink);
     color: #fff;
     box-shadow: 0 8px 24px rgba(15,31,22,0.20), 0 2px 6px rgba(15,31,22,0.12);
 }
+
 .ep-btn-primary:hover {
     box-shadow: 0 14px 32px rgba(15,31,22,0.25), 0 4px 10px rgba(15,31,22,0.14);
     background: #1c3626;
 }
+
 .ep-btn-ghost {
     background: transparent;
     color: var(--c-ink);
     border: 1.5px solid var(--c-line);
 }
+
 .ep-btn-ghost:hover {
     background: var(--c-surface-2);
     border-color: rgba(15,31,22,0.14);
 }
 
-/* Metric strip inside intro bottom */
 .ep-metric-strip {
     display: flex;
     align-items: center;
@@ -333,11 +409,13 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     padding-top: 24px;
     border-top: 1px solid var(--c-line);
 }
+
 .ep-metric {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
+
 .ep-metric-num {
     font-family: var(--font-display);
     font-size: 22px;
@@ -346,20 +424,21 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     color: var(--c-ink);
     line-height: 1;
 }
+
 .ep-metric-label {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--c-subtle);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
+
 .ep-metric-divider {
     width: 1px;
     height: 36px;
     background: var(--c-line);
 }
 
-/* Visual image card */
 .ep-visual {
     border-radius: var(--r-xl);
     overflow: hidden;
@@ -370,42 +449,49 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     border: 1px solid var(--c-line);
     animation: fadeUp 0.7s var(--ease-out) 0.12s both;
 }
+
 .ep-visual img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     display: block;
     transition: transform 0.9s var(--ease-out);
 }
-.ep-visual:hover img { transform: scale(1.06); }
+
+.ep-visual:hover img {
+    transform: scale(1.06);
+}
+
 .ep-visual-grad {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(10,22,14,0) 30%,
-        rgba(10,22,14,0.65) 100%
-    );
+    background: linear-gradient(180deg, rgba(10,22,14,0) 30%, rgba(10,22,14,0.65) 100%);
 }
+
 .ep-visual-caption {
     position: absolute;
-    left: 18px; right: 18px; bottom: 18px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
     padding: 18px 20px;
     border-radius: var(--r-md);
-    background: rgba(255,255,255,0.82);
+    background: rgba(255,255,255,0.84);
     border: 1px solid rgba(255,255,255,0.55);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 }
+
 .ep-visual-caption strong {
     display: block;
     font-family: var(--font-display);
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.03em;
     color: var(--c-ink);
     line-height: 1.3;
 }
+
 .ep-visual-caption span {
     display: block;
     margin-top: 5px;
@@ -415,233 +501,667 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 
 /* ============================================================
-   FEATURE CARDS
-   ============================================================ */
-.ep-features {
+QUICK ACTIONS
+============================================================ */
+.ep-quick-grid {
+    margin-top: 18px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    animation: fadeUp 0.7s var(--ease-out) 0.22s both;
+    grid-template-columns: 1.1fr 1fr 1fr 1fr;
+    gap: 14px;
 }
 
-.ep-feature {
+.ep-quick-card {
+    min-height: 122px;
+    padding: 20px;
     border-radius: var(--r-lg);
-    background: var(--c-surface);
+    background: rgba(255,255,255,0.88);
     border: 1px solid var(--c-line);
     box-shadow: var(--shadow-sm);
-    padding: 26px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: transform 0.26s var(--ease-spring), box-shadow 0.26s ease;
-    position: relative;
-    overflow: hidden;
-}
-.ep-feature::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--r-lg);
-    background: linear-gradient(135deg, rgba(29,170,109,0.04) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.26s ease;
-}
-.ep-feature:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-.ep-feature:hover::before { opacity: 1; }
-
-.ep-feature-icon {
-    width: 50px; height: 50px;
-    border-radius: 16px;
-    background: var(--c-green-lt);
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-    border: 1px solid rgba(29,170,109,0.15);
-    flex-shrink: 0;
-}
-.ep-feature-text {}
-.ep-feature-text strong {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    text-decoration: none;
     color: var(--c-ink);
-    line-height: 1.3;
-}
-.ep-feature-text p {
-    margin-top: 6px;
-    font-size: 13px;
-    line-height: 1.70;
-    color: var(--c-muted);
-}
-
-/* ============================================================
-   STATS
-   ============================================================ */
-.ep-stats-section {
-    margin-top: 24px;
-    animation: fadeUp 0.7s var(--ease-out) 0.32s both;
-}
-
-.ep-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-}
-
-.ep-stat {
-    border-radius: var(--r-lg);
-    background: var(--c-surface);
-    border: 1px solid var(--c-line);
-    box-shadow: var(--shadow-sm);
-    padding: 24px 22px;
     position: relative;
     overflow: hidden;
     transition: transform 0.24s var(--ease-spring), box-shadow 0.24s ease;
-    cursor: default;
 }
-.ep-stat:hover {
-    transform: translateY(-3px);
+
+.ep-quick-card:hover {
+    transform: translateY(-4px);
     box-shadow: var(--shadow-md);
 }
 
-/* Corner accent shape */
-.ep-stat::before {
+.ep-quick-card::after {
     content: '';
     position: absolute;
-    width: 80px; height: 80px;
-    right: -20px; top: -20px;
+    width: 95px;
+    height: 95px;
+    right: -30px;
+    top: -30px;
     border-radius: 999px;
-    transition: transform 0.3s ease;
+    background: var(--c-green-soft);
 }
-.ep-stat:hover::before { transform: scale(1.2); }
 
-.ep-stat-total::before   { background: rgba(29,170,109,0.10); }
-.ep-stat-pending::before { background: rgba(232,160,32,0.14); }
-.ep-stat-proses::before  { background: rgba(43,125,233,0.12); }
-.ep-stat-selesai::before { background: rgba(29,170,109,0.14); }
-
-/* Bottom bar accent */
-.ep-stat::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: 0;
-    width: 100%; height: 3px;
-    border-radius: 0 0 var(--r-lg) var(--r-lg);
-    opacity: 0;
-    transition: opacity 0.24s ease;
-}
-.ep-stat:hover::after { opacity: 1; }
-.ep-stat-total::after   { background: linear-gradient(90deg, var(--c-green), transparent); }
-.ep-stat-pending::after { background: linear-gradient(90deg, var(--c-amber), transparent); }
-.ep-stat-proses::after  { background: linear-gradient(90deg, var(--c-blue), transparent); }
-.ep-stat-selesai::after { background: linear-gradient(90deg, var(--c-teal), transparent); }
-
-.ep-stat-label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--c-subtle);
+.ep-quick-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: var(--c-green-lt);
+    border: 1px solid rgba(29,170,109,0.16);
+    font-size: 21px;
     position: relative;
     z-index: 2;
 }
-.ep-stat-pip {
-    width: 8px; height: 8px;
-    border-radius: 999px;
-}
-.ep-stat-total   .ep-stat-pip { background: var(--c-green); }
-.ep-stat-pending .ep-stat-pip { background: var(--c-amber); }
-.ep-stat-proses  .ep-stat-pip { background: var(--c-blue); }
-.ep-stat-selesai .ep-stat-pip { background: var(--c-teal); }
 
-.ep-stat-num {
+.ep-quick-card strong {
     display: block;
     margin-top: 14px;
     font-family: var(--font-display);
-    font-size: 46px;
+    font-size: 15px;
     font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.06em;
-    color: var(--c-ink);
+    letter-spacing: -0.03em;
     position: relative;
     z-index: 2;
-    transition: color 0.2s;
 }
-.ep-stat-pending:hover .ep-stat-num { color: var(--c-amber-dk); }
-.ep-stat-proses:hover  .ep-stat-num { color: var(--c-blue-dk); }
-.ep-stat-selesai:hover .ep-stat-num { color: var(--c-teal-dk); }
 
-.ep-stat-sub {
+.ep-quick-card span {
     display: block;
     margin-top: 6px;
-    font-size: 12px;
-    color: var(--c-subtle);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--c-muted);
     position: relative;
     z-index: 2;
+}
+
+.ep-quick-main {
+    background:
+        radial-gradient(circle at top right, rgba(29,170,109,0.18), transparent 42%),
+        var(--c-ink);
+    color: #fff;
+}
+
+.ep-quick-main .ep-quick-icon {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.18);
+}
+
+.ep-quick-main span {
+    color: rgba(255,255,255,0.72);
+}
+
+.ep-quick-main::after {
+    background: rgba(255,255,255,0.08);
 }
 
 /* ============================================================
-   REPORTS SECTION
-   ============================================================ */
-.ep-reports-section {
-    margin-top: 72px;
-    animation: fadeUp 0.7s var(--ease-out) 0.4s both;
+INFO + FLOW
+============================================================ */
+.ep-info-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 18px;
+    align-items: stretch;
 }
 
-/* Section header */
-.ep-section-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid var(--c-line);
+.ep-about-card,
+.ep-flow-card,
+.ep-commit-card,
+.ep-type-card,
+.ep-guide-card,
+.ep-tip-card,
+.ep-faq-card,
+.ep-banner-card {
     position: relative;
+    overflow: hidden;
+    border-radius: var(--r-xl);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-md);
 }
-/* Decorative line accent */
-.ep-section-head::after {
+
+.ep-about-card {
+    padding: 34px;
+    min-height: 320px;
+}
+
+.ep-about-card::before {
     content: '';
     position: absolute;
-    left: 0; bottom: -1px;
-    width: 64px; height: 2px;
-    background: var(--c-green);
-    border-radius: 2px;
+    width: 260px;
+    height: 260px;
+    right: -90px;
+    top: -100px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(29,170,109,0.12) 0%, transparent 68%);
 }
 
-.ep-kicker {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--c-green);
-    margin-bottom: 8px;
+.ep-about-card::after {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    left: -70px;
+    bottom: -70px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(232,160,32,0.11) 0%, transparent 68%);
 }
-.ep-section-title {
+
+.ep-about-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.ep-about-title {
+    margin-top: 18px;
     font-family: var(--font-display);
-    font-size: clamp(24px, 2.4vw, 34px);
-    font-weight: 800;
-    letter-spacing: -0.05em;
+    font-size: clamp(26px, 2.7vw, 42px);
+    line-height: 1.08;
+    letter-spacing: -0.055em;
     color: var(--c-ink);
-    line-height: 1.1;
+    font-weight: 800;
 }
-.ep-section-note {
-    max-width: 340px;
+
+.ep-about-title span {
+    color: var(--c-green);
+}
+
+.ep-about-desc {
+    margin-top: 16px;
+    max-width: 650px;
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--c-muted);
+}
+
+.ep-about-points {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.ep-about-point {
+    min-height: 96px;
+    padding: 16px;
+    border-radius: var(--r-md);
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-line);
+}
+
+.ep-about-point strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+}
+
+.ep-about-point p {
+    margin-top: 7px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--c-muted);
+}
+
+.ep-flow-card {
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ep-card-title-main {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    color: var(--c-ink);
+}
+
+.ep-card-subtitle {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--c-muted);
+}
+
+.ep-flow-list {
+    margin-top: 22px;
+    display: grid;
+    gap: 14px;
+}
+
+.ep-flow-item {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.ep-flow-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: var(--c-green-lt);
+    color: var(--c-green-dk);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    border: 1px solid rgba(29,170,109,0.16);
+}
+
+.ep-flow-text strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--c-ink);
+    letter-spacing: -0.03em;
+}
+
+.ep-flow-text span {
+    display: block;
+    margin-top: 4px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--c-muted);
+}
+
+.ep-commit-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.ep-commit-card {
+    padding: 24px;
+    min-height: 190px;
+    transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+}
+
+.ep-commit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.ep-commit-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    background: var(--c-green-lt);
+    border: 1px solid rgba(29,170,109,0.16);
+    font-size: 22px;
+}
+
+.ep-commit-card strong {
+    display: block;
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--c-ink);
+    letter-spacing: -0.035em;
+}
+
+.ep-commit-card p {
+    margin-top: 9px;
     font-size: 13px;
     line-height: 1.7;
     color: var(--c-muted);
-    text-align: right;
 }
 
-/* Toolbar */
+/* ============================================================
+TYPE SECTION
+============================================================ */
+.ep-type-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.ep-type-card {
+    padding: 22px;
+    min-height: 220px;
+    transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+}
+
+.ep-type-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.ep-type-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    background: var(--c-green-lt);
+    border: 1px solid rgba(29,170,109,0.16);
+}
+
+.ep-type-card:nth-child(2) .ep-type-icon {
+    background: var(--c-amber-lt);
+}
+
+.ep-type-card:nth-child(3) .ep-type-icon {
+    background: var(--c-blue-lt);
+}
+
+.ep-type-card:nth-child(4) .ep-type-icon {
+    background: var(--c-red-lt);
+}
+
+.ep-type-card strong {
+    display: block;
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.ep-type-card p {
+    margin-top: 9px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--c-muted);
+}
+
+.ep-type-label {
+    display: inline-flex;
+    margin-top: 16px;
+    height: 30px;
+    padding: 0 12px;
+    align-items: center;
+    border-radius: 999px;
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* ============================================================
+GUIDE + TIPS
+============================================================ */
+.ep-guide-layout {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 18px;
+    align-items: stretch;
+}
+
+.ep-banner-card {
+    padding: 30px;
+    background:
+        radial-gradient(circle at top right, rgba(29,170,109,0.20), transparent 42%),
+        linear-gradient(135deg, #0f1f16, #1b3827);
+    color: #fff;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ep-banner-card .ep-kicker {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+}
+
+.ep-banner-card .ep-kicker::before {
+    background: #ffffff;
+}
+
+.ep-banner-title {
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-size: clamp(26px, 2.8vw, 42px);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.055em;
+}
+
+.ep-banner-desc {
+    margin-top: 14px;
+    color: rgba(255,255,255,0.72);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.ep-banner-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.ep-banner-btn {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.ep-banner-btn.primary {
+    background: #fff;
+    color: var(--c-ink);
+}
+
+.ep-banner-btn.ghost {
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+}
+
+.ep-banner-mini {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.ep-banner-mini div {
+    min-height: 70px;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.ep-banner-mini strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ep-banner-mini span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.68);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.ep-guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.ep-guide-card {
+    padding: 22px;
+    min-height: 172px;
+}
+
+.ep-guide-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ep-guide-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    background: var(--c-green-lt);
+    border: 1px solid rgba(29,170,109,0.16);
+}
+
+.ep-guide-badge {
+    height: 30px;
+    padding: 0 11px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.ep-guide-card strong {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--font-display);
+    font-size: 15.5px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.ep-guide-card p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--c-muted);
+}
+
+/* ============================================================
+FAQ
+============================================================ */
+.ep-faq-layout {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 18px;
+}
+
+.ep-faq-side {
+    padding: 30px;
+    border-radius: var(--r-xl);
+    background:
+        radial-gradient(circle at top right, rgba(232,160,32,0.16), transparent 42%),
+        var(--c-surface);
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-md);
+}
+
+.ep-faq-side h3 {
+    margin-top: 16px;
+    font-family: var(--font-display);
+    font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+}
+
+.ep-faq-side p {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--c-muted);
+}
+
+.ep-faq-list {
+    display: grid;
+    gap: 12px;
+}
+
+.ep-faq-card {
+    padding: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.ep-faq-card details {
+    padding: 18px 20px;
+}
+
+.ep-faq-card summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+}
+
+.ep-faq-card summary::-webkit-details-marker {
+    display: none;
+}
+
+.ep-faq-card summary::after {
+    content: '+';
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border-radius: 999px;
+    background: var(--c-green-lt);
+    color: var(--c-green-dk);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.ep-faq-card details[open] summary::after {
+    content: '−';
+}
+
+.ep-faq-card p {
+    margin-top: 12px;
+    padding-right: 44px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--c-muted);
+}
+
+/* ============================================================
+REPORTS
+============================================================ */
+.ep-reports-section {
+    margin-top: 46px;
+    animation: fadeUp 0.7s var(--ease-out) 0.25s both;
+}
+
 .ep-toolbar {
     margin-top: 22px;
     display: flex;
@@ -650,12 +1170,14 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     gap: 14px;
     flex-wrap: wrap;
 }
+
 .ep-tags {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
 }
+
 .ep-tag {
     height: 36px;
     padding: 0 14px;
@@ -668,9 +1190,10 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     align-items: center;
     gap: 7px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.04em;
 }
+
 .ep-toolbar-btn {
     height: 42px;
     padding: 0 20px;
@@ -683,19 +1206,19 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     gap: 8px;
     font-family: var(--font-display);
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     box-shadow: 0 6px 18px rgba(29,170,109,0.30);
     transition: transform 0.22s var(--ease-spring), box-shadow 0.22s ease;
 }
+
 .ep-toolbar-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(29,170,109,0.38);
     background: var(--c-green-dk);
 }
 
-/* Report grid */
 .ep-grid {
     margin-top: 26px;
     display: grid;
@@ -703,7 +1226,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     gap: 22px;
 }
 
-/* Report card */
 .ep-card {
     border-radius: var(--r-xl);
     overflow: hidden;
@@ -714,6 +1236,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     flex-direction: column;
     transition: transform 0.28s var(--ease-spring), box-shadow 0.28s ease;
 }
+
 .ep-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-xl);
@@ -726,63 +1249,84 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     background: #d4e0d4;
     flex-shrink: 0;
 }
+
 .ep-card-img img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
     transition: transform 0.80s var(--ease-out);
 }
-.ep-card:hover .ep-card-img img { transform: scale(1.10); }
+
+.ep-card:hover .ep-card-img img {
+    transform: scale(1.10);
+}
+
 .ep-card-img-grad {
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, transparent 35%, rgba(10,22,14,0.55) 100%);
 }
 
-/* Status badge */
 .ep-status {
     position: absolute;
-    top: 14px; left: 14px;
+    top: 14px;
+    left: 14px;
     z-index: 3;
-    height: 30px;
+    min-height: 30px;
     padding: 0 12px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-size: 9.5px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.30);
 }
+
 .ep-status::before {
     content: '';
-    width: 6px; height: 6px;
+    width: 6px;
+    height: 6px;
     border-radius: 999px;
 }
+
 .ep-status-pending {
     background: rgba(254,243,208,0.95);
-    color: var(--c-amber-dk);
+    color: #7a4d05;
 }
-.ep-status-pending::before { background: var(--c-amber); }
+
+.ep-status-pending::before {
+    background: var(--c-amber);
+}
+
 .ep-status-proses {
     background: rgba(222,238,255,0.95);
-    color: var(--c-blue-dk);
+    color: #0c4a8d;
 }
-.ep-status-proses::before { background: var(--c-blue); }
+
+.ep-status-proses::before {
+    background: var(--c-blue);
+}
+
 .ep-status-selesai {
     background: rgba(214,245,235,0.97);
-    color: var(--c-teal-dk);
+    color: #064d3a;
 }
-.ep-status-selesai::before { background: var(--c-teal); }
 
-/* Location chip */
+.ep-status-selesai::before {
+    background: var(--c-teal);
+}
+
 .ep-loc {
     position: absolute;
-    left: 14px; right: 14px; bottom: 14px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
     z-index: 3;
     padding: 10px 14px;
     border-radius: var(--r-sm);
@@ -794,10 +1338,11 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     align-items: center;
     gap: 8px;
     font-size: 10.5px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
 }
+
 .ep-loc span:last-child {
     overflow: hidden;
     white-space: nowrap;
@@ -805,18 +1350,17 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     min-width: 0;
 }
 
-/* Card body */
 .ep-card-body {
     padding: 22px;
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 0;
 }
+
 .ep-card-title {
     font-family: var(--font-display);
     font-size: 17px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.03em;
     color: var(--c-ink);
     line-height: 1.35;
@@ -825,6 +1369,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
 .ep-card-desc {
     margin-top: 10px;
     font-size: 13px;
@@ -844,16 +1389,18 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 18px;
 }
+
 .ep-user {
     display: flex;
     align-items: center;
     gap: 10px;
     min-width: 0;
 }
+
 .ep-avatar {
-    width: 38px; height: 38px;
+    width: 38px;
+    height: 38px;
     border-radius: 13px;
     background: var(--c-green-lt);
     border: 1.5px solid rgba(29,170,109,0.15);
@@ -862,30 +1409,36 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     place-items: center;
     font-family: var(--font-display);
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 800;
     flex-shrink: 0;
 }
-.ep-user-info { min-width: 0; }
+
+.ep-user-info {
+    min-width: 0;
+}
+
 .ep-user-role {
     display: block;
     font-size: 9px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.11em;
     text-transform: uppercase;
     color: var(--c-subtle);
     line-height: 1;
 }
+
 .ep-user-name {
     display: block;
     margin-top: 4px;
     font-size: 12.5px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--c-ink-2);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 140px;
 }
+
 .ep-detail-btn {
     height: 36px;
     padding: 0 14px;
@@ -898,12 +1451,13 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     align-items: center;
     gap: 6px;
     font-size: 10.5px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     transition: background 0.18s ease, transform 0.18s var(--ease-spring);
     white-space: nowrap;
 }
+
 .ep-detail-btn:hover {
     background: var(--c-green-lt);
     color: var(--c-green-dk);
@@ -912,8 +1466,8 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 
 /* ============================================================
-   SKELETON
-   ============================================================ */
+SKELETON + EMPTY
+============================================================ */
 .ep-skeleton {
     border-radius: var(--r-xl);
     overflow: hidden;
@@ -921,13 +1475,18 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     border: 1px solid var(--c-line);
     box-shadow: var(--shadow-sm);
 }
+
 .ep-skel-img {
     height: 230px;
     background: linear-gradient(90deg, #e8ede6 0%, #f5f8f3 50%, #e8ede6 100%);
     background-size: 300% 100%;
     animation: shimmer 1.4s ease-in-out infinite;
 }
-.ep-skel-body { padding: 22px; }
+
+.ep-skel-body {
+    padding: 22px;
+}
+
 .ep-skel-line {
     height: 12px;
     border-radius: 999px;
@@ -936,17 +1495,16 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     background-size: 300% 100%;
     animation: shimmer 1.4s ease-in-out infinite;
 }
+
 .ep-skel-line.w-40 { width: 40%; }
 .ep-skel-line.w-70 { width: 70%; height: 16px; }
 .ep-skel-line.w-full { width: 100%; }
+
 @keyframes shimmer {
-    0%   { background-position: 100% 0; }
+    0% { background-position: 100% 0; }
     100% { background-position: -100% 0; }
 }
 
-/* ============================================================
-   EMPTY / ERROR STATE
-   ============================================================ */
 .ep-empty {
     grid-column: 1 / -1;
     min-height: 340px;
@@ -959,9 +1517,14 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     text-align: center;
     padding: 48px 24px;
 }
-.ep-empty-inner { max-width: 380px; }
+
+.ep-empty-inner {
+    max-width: 390px;
+}
+
 .ep-empty-icon {
-    width: 80px; height: 80px;
+    width: 80px;
+    height: 80px;
     margin: 0 auto;
     border-radius: 26px;
     background: var(--c-green-lt);
@@ -970,24 +1533,28 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     place-items: center;
     font-size: 34px;
 }
+
 .ep-empty-icon.error-icon {
     background: #fef5e4;
     border-color: rgba(232,160,32,0.20);
 }
+
 .ep-empty h3 {
     margin-top: 20px;
     font-family: var(--font-display);
     font-size: 21px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.04em;
     color: var(--c-ink);
 }
+
 .ep-empty p {
     margin-top: 10px;
     font-size: 13.5px;
     line-height: 1.75;
     color: var(--c-muted);
 }
+
 .ep-empty-cta {
     display: inline-flex;
     align-items: center;
@@ -1001,75 +1568,193 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     text-decoration: none;
     font-family: var(--font-display);
     font-size: 11.5px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    transition: transform 0.22s var(--ease-spring), background 0.18s ease;
 }
-.ep-empty-cta:hover { transform: translateY(-2px); background: #1c3626; }
 
 /* ============================================================
-   ANIMATION
-   ============================================================ */
+ANIMATION + RESPONSIVE
+============================================================ */
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 1080px) {
-    .ep-hero-top { grid-template-columns: 1fr; }
-    .ep-visual { min-height: 300px; }
-    .ep-features { grid-template-columns: repeat(3, 1fr); }
-    .ep-stats { grid-template-columns: repeat(2, 1fr); }
-    .ep-grid { grid-template-columns: repeat(2, 1fr); }
+    .ep-hero-top,
+    .ep-info-grid,
+    .ep-guide-layout,
+    .ep-faq-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-visual {
+        min-height: 300px;
+    }
+
+    .ep-quick-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ep-type-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ep-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 760px) {
-    .ep { margin-top: -18px; }
-    .ep-wrap { width: min(calc(100% - 28px), 1180px); }
-    .ep-hero { padding-top: 28px; }
+    .ep {
+        margin-top: -18px;
+        padding-bottom: 70px;
+    }
 
-    .ep-intro { padding: 28px 24px 24px; border-radius: var(--r-lg); gap: 20px; }
-    .ep-title { font-size: 32px; }
-    .ep-desc { font-size: 13.5px; }
-    .ep-actions { flex-direction: column; }
-    .ep-btn { width: 100%; height: 50px; }
-    .ep-metric-strip { gap: 18px; }
-    .ep-metric-num { font-size: 20px; }
+    .ep-wrap {
+        width: min(calc(100% - 28px), 1180px);
+    }
 
-    .ep-visual { min-height: 240px; border-radius: var(--r-lg); }
+    .ep-hero {
+        padding-top: 28px;
+    }
 
-    .ep-features { grid-template-columns: 1fr; gap: 12px; }
-    .ep-feature { border-radius: var(--r-md); flex-direction: row; align-items: flex-start; }
+    .ep-intro {
+        padding: 28px 24px 24px;
+        border-radius: var(--r-lg);
+        gap: 20px;
+    }
 
-    .ep-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .ep-stat { padding: 18px 16px; border-radius: var(--r-md); }
-    .ep-stat-num { font-size: 38px; }
+    .ep-title {
+        font-size: 32px;
+    }
 
-    .ep-reports-section { margin-top: 52px; }
-    .ep-section-head { flex-direction: column; align-items: flex-start; }
-    .ep-section-note { text-align: left; max-width: 100%; }
-    .ep-toolbar { flex-direction: column; align-items: stretch; }
-    .ep-toolbar-btn { width: 100%; justify-content: center; }
-    .ep-grid { grid-template-columns: 1fr; gap: 16px; }
-    .ep-card { border-radius: var(--r-lg); }
-    .ep-card-img { height: 215px; }
+    .ep-desc {
+        font-size: 13.5px;
+    }
+
+    .ep-actions {
+        flex-direction: column;
+    }
+
+    .ep-btn {
+        width: 100%;
+        height: 50px;
+    }
+
+    .ep-metric-strip {
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .ep-metric-num {
+        font-size: 20px;
+    }
+
+    .ep-visual {
+        min-height: 240px;
+        border-radius: var(--r-lg);
+    }
+
+    .ep-quick-grid,
+    .ep-about-points,
+    .ep-commit-grid,
+    .ep-type-grid,
+    .ep-guide-grid,
+    .ep-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-about-card,
+    .ep-flow-card,
+    .ep-commit-card,
+    .ep-type-card,
+    .ep-guide-card,
+    .ep-faq-card,
+    .ep-banner-card,
+    .ep-faq-side {
+        border-radius: var(--r-lg);
+    }
+
+    .ep-about-card,
+    .ep-flow-card,
+    .ep-banner-card,
+    .ep-faq-side {
+        padding: 24px 22px;
+    }
+
+    .ep-section-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ep-section-note {
+        text-align: left;
+        max-width: 100%;
+    }
+
+    .ep-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ep-toolbar-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ep-card {
+        border-radius: var(--r-lg);
+    }
+
+    .ep-card-img {
+        height: 215px;
+    }
+
+    .ep-banner-mini {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-faq-card p {
+        padding-right: 0;
+    }
 }
 
 @media (max-width: 420px) {
-    .ep-features { grid-template-columns: 1fr; }
-    .ep-stats { grid-template-columns: 1fr; }
-    .ep-title { font-size: 28px; }
-    .ep-card-footer { flex-wrap: wrap; }
-    .ep-detail-btn { width: 100%; justify-content: center; }
+    .ep-title {
+        font-size: 28px;
+    }
+
+    .ep-metric-strip {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .ep-metric-divider {
+        display: none;
+    }
+
+    .ep-card-footer {
+        flex-wrap: wrap;
+    }
+
+    .ep-detail-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 </style>
 
 <div class="ep">
-    {{-- Ambient blobs --}}
     <div class="ep-blob ep-blob-1"></div>
     <div class="ep-blob ep-blob-2"></div>
     <div class="ep-blob ep-blob-3"></div>
@@ -1077,12 +1762,8 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     {{-- ======================== HERO ======================== --}}
     <section class="ep-wrap ep-hero">
         <div class="ep-hero-top">
-
-            {{-- Intro card --}}
             <div class="ep-intro">
-                <div class="ep-intro-deco ep-intro-deco-1"></div>
-                <div class="ep-intro-deco ep-intro-deco-2"></div>
-                <div class="ep-intro-deco ep-intro-deco-grid"></div>
+                <div class="ep-intro-grid"></div>
 
                 <div class="ep-intro-top">
                     <div class="ep-badge">
@@ -1098,8 +1779,8 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
                     <p class="ep-desc">
                         E-SAPO membantu masyarakat mengirim aduan sampah liar dengan alur yang jelas,
-                        data lokasi yang rapi, dan status penanganan yang mudah dipantau oleh warga
-                        maupun petugas.
+                        data lokasi yang rapi, bukti foto lapangan, dan arsip laporan yang mudah dipantau
+                        oleh warga maupun petugas.
                     </p>
 
                     <div class="ep-actions">
@@ -1107,6 +1788,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                             Buat Laporan Sekarang
                             <span>→</span>
                         </a>
+
                         <a href="#laporan-terbaru" class="ep-btn ep-btn-ghost">
                             Lihat Arsip
                         </a>
@@ -1119,12 +1801,16 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                             <span class="ep-metric-num">Gratis</span>
                             <span class="ep-metric-label">Tanpa biaya</span>
                         </div>
+
                         <div class="ep-metric-divider"></div>
+
                         <div class="ep-metric">
                             <span class="ep-metric-num">Real-time</span>
                             <span class="ep-metric-label">Pantau status</span>
                         </div>
+
                         <div class="ep-metric-divider"></div>
+
                         <div class="ep-metric">
                             <span class="ep-metric-num">Publik</span>
                             <span class="ep-metric-label">Transparan</span>
@@ -1133,7 +1819,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                 </div>
             </div>
 
-            {{-- Visual image --}}
             <div class="ep-visual">
                 <img
                     src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200"
@@ -1146,67 +1831,336 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                 </div>
             </div>
         </div>
+    </section>
 
-        {{-- Feature cards --}}
-        <div class="ep-features">
-            <div class="ep-feature">
-                <div class="ep-feature-icon">📍</div>
-                <div class="ep-feature-text">
-                    <strong>Lokasi Terdokumentasi</strong>
-                    <p>Data desa, RT, dan RW membantu petugas menelusuri titik laporan dengan lebih cepat.</p>
+    {{-- ======================== QUICK ACTIONS ======================== --}}
+    <section class="ep-wrap ep-section">
+        <div class="ep-quick-grid">
+            <a href="/create" class="ep-quick-card ep-quick-main">
+                <div class="ep-quick-icon">➕</div>
+                <strong>Buat Aduan Baru</strong>
+                <span>Laporkan titik sampah bermasalah secara cepat dan terarah.</span>
+            </a>
+
+            <a href="#alur-laporan" class="ep-quick-card">
+                <div class="ep-quick-icon">🧭</div>
+                <strong>Lihat Alur</strong>
+                <span>Pahami langkah pelaporan sebelum mengirim aduan.</span>
+            </a>
+
+            <a href="#panduan-laporan" class="ep-quick-card">
+                <div class="ep-quick-icon">📋</div>
+                <strong>Panduan Laporan</strong>
+                <span>Ikuti tips agar laporan lebih jelas dan mudah diverifikasi.</span>
+            </a>
+
+            <a href="#laporan-terbaru" class="ep-quick-card">
+                <div class="ep-quick-icon">🗂️</div>
+                <strong>Arsip Publik</strong>
+                <span>Lihat daftar aduan masyarakat yang sudah masuk ke sistem.</span>
+            </a>
+        </div>
+    </section>
+
+    {{-- ======================== TENTANG + ALUR ======================== --}}
+    <section id="alur-laporan" class="ep-wrap ep-section">
+        <div class="ep-info-grid">
+            <div class="ep-about-card">
+                <div class="ep-about-inner">
+                    <span class="ep-kicker">Tentang Website</span>
+
+                    <h2 class="ep-about-title">
+                        E-SAPO Membantu Warga Melaporkan
+                        <span>Masalah Sampah</span> dengan Lebih Mudah.
+                    </h2>
+
+                    <p class="ep-about-desc">
+                        Website ini menjadi ruang pelaporan masyarakat agar informasi mengenai tumpukan sampah,
+                        lokasi bermasalah, dan kondisi lingkungan dapat tersampaikan dengan lebih rapi.
+                        Setiap laporan yang masuk menjadi data awal untuk membantu proses pemantauan
+                        dan tindak lanjut oleh pihak terkait.
+                    </p>
+
+                    <div class="ep-about-points">
+                        <div class="ep-about-point">
+                            <strong>Data Lebih Rapi</strong>
+                            <p>Laporan tersimpan berdasarkan lokasi, pelapor, deskripsi, dan status.</p>
+                        </div>
+
+                        <div class="ep-about-point">
+                            <strong>Mudah Dipantau</strong>
+                            <p>Masyarakat dapat melihat laporan yang sudah masuk secara publik.</p>
+                        </div>
+
+                        <div class="ep-about-point">
+                            <strong>Lebih Terarah</strong>
+                            <p>Informasi laporan membantu proses pengecekan menjadi lebih jelas.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="ep-feature">
-                <div class="ep-feature-icon">📸</div>
-                <div class="ep-feature-text">
-                    <strong>Bukti Foto Lapangan</strong>
-                    <p>Laporan dapat menyertakan dokumentasi visual agar proses verifikasi lebih mudah dilakukan.</p>
+
+            <div class="ep-flow-card">
+                <h3 class="ep-card-title-main">Alur Penggunaan</h3>
+                <p class="ep-card-subtitle">
+                    Proses pelaporan dibuat sederhana supaya masyarakat bisa mengirim aduan tanpa kebingungan.
+                </p>
+
+                <div class="ep-flow-list">
+                    <div class="ep-flow-item">
+                        <div class="ep-flow-number">01</div>
+                        <div class="ep-flow-text">
+                            <strong>Buat Laporan</strong>
+                            <span>Isi lokasi, RT/RW, deskripsi masalah, dan bukti foto lapangan.</span>
+                        </div>
+                    </div>
+
+                    <div class="ep-flow-item">
+                        <div class="ep-flow-number">02</div>
+                        <div class="ep-flow-text">
+                            <strong>Data Masuk Sistem</strong>
+                            <span>Laporan tersimpan dan dapat dilihat pada arsip publik masyarakat.</span>
+                        </div>
+                    </div>
+
+                    <div class="ep-flow-item">
+                        <div class="ep-flow-number">03</div>
+                        <div class="ep-flow-text">
+                            <strong>Dipantau Petugas</strong>
+                            <span>Data laporan membantu petugas melihat titik masalah yang perlu dicek.</span>
+                        </div>
+                    </div>
+
+                    <div class="ep-flow-item">
+                        <div class="ep-flow-number">04</div>
+                        <div class="ep-flow-text">
+                            <strong>Status Diperbarui</strong>
+                            <span>Status laporan dapat berubah menjadi pending, proses, atau selesai.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="ep-feature">
-                <div class="ep-feature-icon">📊</div>
-                <div class="ep-feature-text">
-                    <strong>Status Transparan</strong>
-                    <p>Setiap laporan memiliki status sehingga masyarakat dapat melihat perkembangan penanganan.</p>
+        </div>
+
+        <div class="ep-commit-grid">
+            <div class="ep-commit-card">
+                <div class="ep-commit-icon">🌱</div>
+                <strong>Peduli Lingkungan</strong>
+                <p>
+                    Setiap laporan kecil dapat membantu menciptakan lingkungan yang lebih bersih,
+                    sehat, dan nyaman untuk warga sekitar.
+                </p>
+            </div>
+
+            <div class="ep-commit-card">
+                <div class="ep-commit-icon">🧭</div>
+                <strong>Informasi Jelas</strong>
+                <p>
+                    Data lokasi dan deskripsi laporan dibuat terstruktur agar proses pengecekan
+                    tidak membingungkan.
+                </p>
+            </div>
+
+            <div class="ep-commit-card">
+                <div class="ep-commit-icon">🤝</div>
+                <strong>Partisipasi Warga</strong>
+                <p>
+                    Website ini mendorong masyarakat ikut menjaga kebersihan melalui pelaporan
+                    yang mudah dan cepat.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    {{-- ======================== JENIS MASALAH ======================== --}}
+    <section class="ep-wrap ep-section">
+        <div class="ep-section-head">
+            <div>
+                <span class="ep-kicker">Kategori Aduan</span>
+                <h2 class="ep-section-title">Jenis Masalah yang Bisa Dilaporkan</h2>
+            </div>
+
+            <p class="ep-section-note">
+                Gunakan E-SAPO untuk melaporkan masalah kebersihan yang mengganggu lingkungan
+                dan membutuhkan perhatian lebih lanjut.
+            </p>
+        </div>
+
+        <div class="ep-type-grid">
+            <div class="ep-type-card">
+                <div class="ep-type-icon">🗑️</div>
+                <strong>Tumpukan Sampah</strong>
+                <p>Sampah menumpuk di pinggir jalan, lahan kosong, selokan, atau area umum warga.</p>
+                <span class="ep-type-label">Paling Umum</span>
+            </div>
+
+            <div class="ep-type-card">
+                <div class="ep-type-icon">🚧</div>
+                <strong>Sampah Liar</strong>
+                <p>Pembuangan sampah sembarangan di lokasi yang bukan tempat pembuangan resmi.</p>
+                <span class="ep-type-label">Perlu Dicek</span>
+            </div>
+
+            <div class="ep-type-card">
+                <div class="ep-type-icon">🌧️</div>
+                <strong>Saluran Tersumbat</strong>
+                <p>Sampah yang menutup aliran air dan berpotensi menyebabkan genangan atau banjir.</p>
+                <span class="ep-type-label">Prioritas</span>
+            </div>
+
+            <div class="ep-type-card">
+                <div class="ep-type-icon">⚠️</div>
+                <strong>Bau Mengganggu</strong>
+                <p>Kondisi sampah yang menimbulkan bau tidak sedap dan mengganggu aktivitas warga.</p>
+                <span class="ep-type-label">Butuh Tindak Lanjut</span>
+            </div>
+        </div>
+    </section>
+
+    {{-- ======================== PANDUAN ======================== --}}
+    <section id="panduan-laporan" class="ep-wrap ep-section">
+        <div class="ep-section-head">
+            <div>
+                <span class="ep-kicker">Panduan Warga</span>
+                <h2 class="ep-section-title">Biar Laporan Kamu Lebih Mudah Diproses</h2>
+            </div>
+
+            <p class="ep-section-note">
+                Laporan yang jelas membantu petugas memahami kondisi lapangan tanpa harus menebak lokasi,
+                bukti, atau tingkat masalahnya.
+            </p>
+        </div>
+
+        <div class="ep-guide-layout">
+            <div class="ep-banner-card">
+                <div>
+                    <span class="ep-kicker">Tips Cepat</span>
+
+                    <h3 class="ep-banner-title">
+                        Laporan yang lengkap bikin pengecekan jadi lebih cepat.
+                    </h3>
+
+                    <p class="ep-banner-desc">
+                        Pastikan lokasi, RT/RW, foto, dan deskripsi masalah ditulis dengan jelas.
+                        Semakin lengkap data yang dikirim, semakin mudah laporan dibaca dan dipantau.
+                    </p>
+
+                    <div class="ep-banner-actions">
+                        <a href="/create" class="ep-banner-btn primary">Buat Laporan</a>
+                        <a href="#laporan-terbaru" class="ep-banner-btn ghost">Lihat Arsip</a>
+                    </div>
+                </div>
+
+                <div class="ep-banner-mini">
+                    <div>
+                        <strong>Foto</strong>
+                        <span>Ambil gambar yang jelas</span>
+                    </div>
+
+                    <div>
+                        <strong>Lokasi</strong>
+                        <span>Tulis titik yang mudah dicari</span>
+                    </div>
+
+                    <div>
+                        <strong>Status</strong>
+                        <span>Pantau perkembangan laporan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ep-guide-grid">
+                <div class="ep-guide-card">
+                    <div class="ep-guide-top">
+                        <div class="ep-guide-icon">📸</div>
+                        <span class="ep-guide-badge">Bukti</span>
+                    </div>
+                    <strong>Gunakan Foto yang Jelas</strong>
+                    <p>Pastikan foto tidak blur dan memperlihatkan kondisi sampah secara langsung.</p>
+                </div>
+
+                <div class="ep-guide-card">
+                    <div class="ep-guide-top">
+                        <div class="ep-guide-icon">📍</div>
+                        <span class="ep-guide-badge">Lokasi</span>
+                    </div>
+                    <strong>Tulis Lokasi Spesifik</strong>
+                    <p>Tambahkan patokan seperti dekat warung, gang, jembatan, atau fasilitas umum.</p>
+                </div>
+
+                <div class="ep-guide-card">
+                    <div class="ep-guide-top">
+                        <div class="ep-guide-icon">📝</div>
+                        <span class="ep-guide-badge">Deskripsi</span>
+                    </div>
+                    <strong>Jelaskan Masalahnya</strong>
+                    <p>Tulis kondisi singkat, misalnya sampah menumpuk, bau, atau menyumbat saluran.</p>
+                </div>
+
+                <div class="ep-guide-card">
+                    <div class="ep-guide-top">
+                        <div class="ep-guide-icon">✅</div>
+                        <span class="ep-guide-badge">Cek Lagi</span>
+                    </div>
+                    <strong>Periksa Sebelum Kirim</strong>
+                    <p>Pastikan data lokasi, RT/RW, dan foto sudah sesuai sebelum laporan dikirim.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- ======================== STATS ======================== --}}
-    <section class="ep-wrap ep-stats-section">
-        <div class="ep-stats">
-            <div class="ep-stat ep-stat-total">
-                <span class="ep-stat-label">
-                    <span class="ep-stat-pip"></span>
-                    Total Laporan
-                </span>
-                <span id="stat-total" class="ep-stat-num">0</span>
-                <span class="ep-stat-sub">Semua data yang masuk</span>
+    {{-- ======================== FAQ ======================== --}}
+    <section class="ep-wrap ep-section">
+        <div class="ep-faq-layout">
+            <div class="ep-faq-side">
+                <span class="ep-kicker">Bantuan</span>
+                <h3>Pertanyaan yang Sering Muncul</h3>
+                <p>
+                    Bagian ini membantu masyarakat memahami cara kerja E-SAPO,
+                    mulai dari pengiriman aduan sampai pemantauan laporan.
+                </p>
             </div>
-            <div class="ep-stat ep-stat-pending">
-                <span class="ep-stat-label">
-                    <span class="ep-stat-pip"></span>
-                    Pending
-                </span>
-                <span id="stat-pending" class="ep-stat-num">0</span>
-                <span class="ep-stat-sub">Menunggu verifikasi</span>
-            </div>
-            <div class="ep-stat ep-stat-proses">
-                <span class="ep-stat-label">
-                    <span class="ep-stat-pip"></span>
-                    Proses
-                </span>
-                <span id="stat-proses" class="ep-stat-num">0</span>
-                <span class="ep-stat-sub">Sedang ditangani</span>
-            </div>
-            <div class="ep-stat ep-stat-selesai">
-                <span class="ep-stat-label">
-                    <span class="ep-stat-pip"></span>
-                    Selesai
-                </span>
-                <span id="stat-selesai" class="ep-stat-num">0</span>
-                <span class="ep-stat-sub">Sudah dituntaskan</span>
+
+            <div class="ep-faq-list">
+                <div class="ep-faq-card">
+                    <details open>
+                        <summary>Apakah masyarakat harus login untuk membuat laporan?</summary>
+                        <p>
+                            Jika sistem sedang memakai token akun, masyarakat perlu masuk terlebih dahulu
+                            agar laporan bisa terhubung dengan data pelapor.
+                        </p>
+                    </details>
+                </div>
+
+                <div class="ep-faq-card">
+                    <details>
+                        <summary>Apa saja data yang sebaiknya diisi?</summary>
+                        <p>
+                            Isi lokasi spesifik, desa, RT/RW, deskripsi masalah, dan foto bukti lapangan
+                            agar laporan lebih mudah dipahami.
+                        </p>
+                    </details>
+                </div>
+
+                <div class="ep-faq-card">
+                    <details>
+                        <summary>Apakah laporan bisa dilihat oleh masyarakat?</summary>
+                        <p>
+                            Ya, laporan yang masuk dapat tampil di arsip publik supaya masyarakat bisa
+                            melihat dokumentasi aduan yang sudah dikirim.
+                        </p>
+                    </details>
+                </div>
+
+                <div class="ep-faq-card">
+                    <details>
+                        <summary>Apa arti status pending, proses, dan selesai?</summary>
+                        <p>
+                            Pending berarti menunggu verifikasi, proses berarti sedang ditangani,
+                            dan selesai berarti laporan sudah dituntaskan.
+                        </p>
+                    </details>
+                </div>
             </div>
         </div>
     </section>
@@ -1218,6 +2172,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                 <span class="ep-kicker">Arsip Publik</span>
                 <h2 class="ep-section-title">Aduan Terbaru dari Masyarakat</h2>
             </div>
+
             <p class="ep-section-note">
                 Setiap laporan ditampilkan sebagai dokumentasi publik untuk membantu
                 pemantauan kebersihan wilayah dan tindak lanjut yang lebih terarah.
@@ -1230,6 +2185,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
                 <span class="ep-tag">📷 Bukti Foto</span>
                 <span class="ep-tag">📌 Lokasi RT/RW</span>
             </div>
+
             <a href="/create" class="ep-toolbar-btn">
                 + Tambah Laporan
             </a>
@@ -1256,13 +2212,8 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const container   = document.getElementById('container-pengaduan');
-    const statTotal   = document.getElementById('stat-total');
-    const statPending = document.getElementById('stat-pending');
-    const statProses  = document.getElementById('stat-proses');
-    const statSelesai = document.getElementById('stat-selesai');
+    const container = document.getElementById('container-pengaduan');
 
-    /* ---- helpers ---- */
     const safeText = (v, fallback = '-') =>
         (v === null || v === undefined || v === '') ? fallback : String(v);
 
@@ -1276,97 +2227,103 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const normalizeStatus = (status) => {
         const s = safeText(status, 'pending').toLowerCase();
-        if (['proses','diproses','process'].includes(s)) return 'proses';
-        if (['selesai','done','completed'].includes(s))  return 'selesai';
+
+        if (['proses', 'diproses', 'process'].includes(s)) {
+            return 'proses';
+        }
+
+        if (['selesai', 'done', 'completed'].includes(s)) {
+            return 'selesai';
+        }
+
         return 'pending';
     };
 
     const statusLabel = (s) =>
         s === 'proses' ? 'Proses' : s === 'selesai' ? 'Selesai' : 'Pending';
 
-    /* ---- counter animation ---- */
-    const animateCount = (el, target) => {
-        const duration = 900;
-        const start    = performance.now();
-        const from     = parseInt(el.innerText) || 0;
-        const update   = (now) => {
-            const t = Math.min((now - start) / duration, 1);
-            const ease = 1 - Math.pow(1 - t, 4);
-            el.innerText = Math.round(from + (target - from) * ease);
-            if (t < 1) requestAnimationFrame(update);
-        };
-        requestAnimationFrame(update);
-    };
-
-    const setStats = (data) => {
-        const pending = data.filter(i => normalizeStatus(i.status) === 'pending').length;
-        const proses  = data.filter(i => normalizeStatus(i.status) === 'proses').length;
-        const selesai = data.filter(i => normalizeStatus(i.status) === 'selesai').length;
-        animateCount(statTotal,   data.length);
-        animateCount(statPending, pending);
-        animateCount(statProses,  proses);
-        animateCount(statSelesai, selesai);
-    };
-
-    /* ---- fetch ---- */
     fetch('/api/pengaduan', {
         method: 'GET',
-        headers: { 'Accept': 'application/json' }
+        headers: {
+            'Accept': 'application/json'
+        }
     })
     .then(async res => {
         const data = await res.json();
-        if (!res.ok) throw data;
+
+        if (!res.ok) {
+            throw data;
+        }
+
         return data;
     })
     .then(data => {
         container.innerHTML = '';
 
         if (!Array.isArray(data) || data.length === 0) {
-            setStats([]);
             container.innerHTML = `
                 <div class="ep-empty">
                     <div class="ep-empty-inner">
                         <div class="ep-empty-icon">🍃</div>
                         <h3>Belum Ada Laporan Masuk</h3>
-                        <p>Kondisi masih aman. Jika menemukan tumpukan sampah liar,
-                        segera buat laporan agar petugas dapat menindaklanjuti.</p>
+                        <p>
+                            Kondisi masih aman. Jika menemukan tumpukan sampah liar,
+                            segera buat laporan agar petugas dapat menindaklanjuti.
+                        </p>
                         <a href="/create" class="ep-empty-cta">Buat Laporan Pertama →</a>
                     </div>
-                </div>`;
+                </div>
+            `;
             return;
         }
 
-        setStats(data);
-
         data.forEach((item, idx) => {
-            const status    = normalizeStatus(item.status);
-            const imageUrl  = item.foto
+            const status = normalizeStatus(item.status);
+
+            const imageUrl = item.foto
                 ? `/storage/${item.foto}`
                 : 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900';
-            const userName  = item.user ? safeText(item.user.name, 'Masyarakat') : 'Masyarakat';
-            const initial   = userName.charAt(0).toUpperCase();
-            const desaName  = item.desa
+
+            const userName = item.user
+                ? safeText(item.user.name, 'Masyarakat')
+                : 'Masyarakat';
+
+            const initial = userName.charAt(0).toUpperCase();
+
+            const desaName = item.desa
                 ? safeText(item.desa.nama_desa || item.desa.name, 'Sektor Umum')
                 : 'Sektor Umum';
-            const rt        = item.rtrw ? safeText(item.rtrw.rt) : '-';
-            const rw        = item.rtrw ? safeText(item.rtrw.rw) : '-';
-            const lokasi    = safeText(item.lokasi_spesifik, 'Lokasi belum tersedia');
-            const deskripsi = safeText(item.deskripsi, 'Tidak ada deskripsi tambahan untuk laporan ini.');
+
+            const rt = item.rtrw ? safeText(item.rtrw.rt) : '-';
+            const rw = item.rtrw ? safeText(item.rtrw.rw) : '-';
+
+            const lokasi = safeText(item.lokasi_spesifik, 'Lokasi belum tersedia');
+
+            const deskripsi = safeText(
+                item.deskripsi,
+                'Tidak ada deskripsi tambahan untuk laporan ini.'
+            );
 
             const card = `
                 <article class="ep-card" style="animation: fadeUp 0.55s var(--ease-out) ${idx * 0.08}s both">
                     <div class="ep-card-img">
                         <img src="${esc(imageUrl)}" alt="Bukti laporan lapangan" loading="lazy">
                         <div class="ep-card-img-grad"></div>
-                        <span class="ep-status ep-status-${status}">${statusLabel(status)}</span>
+
+                        <span class="ep-status ep-status-${status}">
+                            ${statusLabel(status)}
+                        </span>
+
                         <div class="ep-loc">
                             <span>📍</span>
                             <span>${esc(desaName)} · RT ${esc(rt)}/RW ${esc(rw)}</span>
                         </div>
                     </div>
+
                     <div class="ep-card-body">
                         <h3 class="ep-card-title">${esc(lokasi)}</h3>
                         <p class="ep-card-desc">${esc(deskripsi)}</p>
+
                         <div class="ep-card-footer">
                             <div class="ep-user">
                                 <div class="ep-avatar">${esc(initial)}</div>
@@ -1375,26 +2332,33 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <span class="ep-user-name">${esc(userName)}</span>
                                 </div>
                             </div>
-                            <a href="/show/${esc(item.id)}" class="ep-detail-btn">Detail →</a>
+
+                            <a href="/show/${esc(item.id)}" class="ep-detail-btn">
+                                Detail →
+                            </a>
                         </div>
                     </div>
-                </article>`;
+                </article>
+            `;
 
             container.insertAdjacentHTML('beforeend', card);
         });
     })
     .catch(err => {
         console.error('Error:', err);
-        [statTotal, statPending, statProses, statSelesai].forEach(el => el.innerText = 0);
+
         container.innerHTML = `
             <div class="ep-empty">
                 <div class="ep-empty-inner">
                     <div class="ep-empty-icon error-icon">⚠️</div>
                     <h3>Data Gagal Dimuat</h3>
-                    <p>Terjadi masalah saat mengambil data laporan.
-                    Cek kembali route API, koneksi database, atau response JSON dari server.</p>
+                    <p>
+                        Terjadi masalah saat mengambil data laporan.
+                        Cek kembali route API, koneksi database, atau response JSON dari server.
+                    </p>
                 </div>
-            </div>`;
+            </div>
+        `;
     });
 });
 </script>

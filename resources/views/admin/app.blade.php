@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>E-SAPO Admin - Sistem Pengaduan Sampah</title>
 
     <style>
@@ -343,44 +344,72 @@
                 .replaceAll("'", '&#039;');
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const token = localStorage.getItem('access_token');
-            const role = localStorage.getItem('user_role');
-            const userName = localStorage.getItem('user_name');
+        function clearAdminSession() {
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('user_role');
+            sessionStorage.removeItem('user_name');
+        }
 
-            if (!token || role !== 'admin') {
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = sessionStorage.getItem('access_token');
+
+            const role = String(
+                sessionStorage.getItem('user_role') || ''
+            ).trim().toLowerCase();
+
+            const userName = sessionStorage.getItem('user_name');
+
+            if (!token) {
+                alert('Silakan login terlebih dahulu.');
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+
+            if (role !== 'admin') {
                 alert('Akses ditolak. Halaman ini hanya untuk admin.');
-                window.location.href = '/login';
+                window.location.href = "{{ route('home') }}";
                 return;
             }
 
             const adminName = document.getElementById('admin-navbar-name');
 
             if (adminName) {
-                adminName.innerHTML = adminEscapeHtml(userName || 'Admin');
+                adminName.innerHTML = adminEscapeHtml(
+                    userName || 'Admin'
+                );
             }
         });
 
-        function adminLogout() {
-            const confirmLogout = confirm('Apakah Anda yakin ingin keluar dari admin panel E-SAPO?');
+        async function adminLogout() {
+            const confirmLogout = confirm(
+                'Apakah Anda yakin ingin keluar dari admin panel E-SAPO?'
+            );
 
             if (!confirmLogout) {
                 return;
             }
 
-            const token = localStorage.getItem('access_token');
+            const token = sessionStorage.getItem('access_token');
 
-            fetch('/api/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
+            try {
+                if (token) {
+                    await fetch('/api/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        }
+                    });
                 }
-            }).finally(() => {
-                localStorage.clear();
+            } catch (error) {
+                console.error('Admin Logout Error:', error);
+            } finally {
+                clearAdminSession();
+
                 alert('Anda telah berhasil keluar.');
-                window.location.href = '/login';
-            });
+
+                window.location.href = "{{ route('login') }}";
+            }
         }
     </script>
 
