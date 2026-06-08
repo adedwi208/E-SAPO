@@ -11,10 +11,17 @@ class Pengaduan extends Model
         'user_id',
         'desa_id',
         'rtrw_id',
+        'latitude',
+        'longitude',
         'lokasi_spesifik',
         'deskripsi',
         'foto',
         'status',
+    ];
+
+    protected $casts = [
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
     ];
 
     public function user(): BelongsTo

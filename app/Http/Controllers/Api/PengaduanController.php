@@ -77,9 +77,30 @@ class PengaduanController extends Controller
     {
         $request->validate([
             'desa_id' => 'required|exists:desas,id',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
             'lokasi_spesifik' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'desa_id.required' => 'Desa wajib dipilih.',
+            'desa_id.exists' => 'Desa yang dipilih tidak valid.',
+
+            'latitude.required' => 'Titik latitude lokasi wajib dipilih.',
+            'latitude.numeric' => 'Latitude harus berupa angka.',
+
+            'longitude.required' => 'Titik longitude lokasi wajib dipilih.',
+            'longitude.numeric' => 'Longitude harus berupa angka.',
+
+            'lokasi_spesifik.required' => 'Lokasi spesifik wajib diisi.',
+            'lokasi_spesifik.max' => 'Lokasi spesifik maksimal 255 karakter.',
+
+            'deskripsi.required' => 'Deskripsi wajib diisi.',
+
+            'foto.required' => 'Foto bukti wajib diupload.',
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Foto harus berformat JPG, JPEG, atau PNG.',
+            'foto.max' => 'Ukuran foto maksimal 2MB.',
         ]);
 
         $fotoPath = null;
@@ -92,11 +113,17 @@ class PengaduanController extends Controller
             'user_id' => $request->user()->id,
             'desa_id' => $request->desa_id,
             'rtrw_id' => null,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'lokasi_spesifik' => $request->lokasi_spesifik,
             'deskripsi' => $request->deskripsi,
             'foto' => $fotoPath,
             'status' => 'pending',
         ]);
+
+        $pengaduan->foto_url = $pengaduan->foto
+            ? asset('storage/' . $pengaduan->foto)
+            : null;
 
         return response()->json([
             'message' => 'Pengaduan berhasil dikirim.',
@@ -109,7 +136,7 @@ class PengaduanController extends Controller
     |--------------------------------------------------------------------------
     | SHOW
     |--------------------------------------------------------------------------
-    | Dipakai admin untuk melihat detail satu laporan.
+    | Dipakai admin / detail untuk melihat satu laporan.
     |--------------------------------------------------------------------------
     */
 
@@ -155,6 +182,9 @@ class PengaduanController extends Controller
 
         $request->validate([
             'status' => 'required|in:pending,proses,selesai',
+        ], [
+            'status.required' => 'Status wajib diisi.',
+            'status.in' => 'Status harus pending, proses, atau selesai.',
         ]);
 
         $pengaduan->update([

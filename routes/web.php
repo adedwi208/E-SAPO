@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Pengaduan;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes - E-SAPO
 |--------------------------------------------------------------------------
 | Route ini hanya untuk halaman Blade.
-| Proses data tetap lewat routes/api.php.
+| Proses data utama tetap lewat routes/api.php.
 */
 
 /*
@@ -49,8 +50,18 @@ Route::get('/create', function () {
 })->name('laporan.create');
 
 Route::get('/show/{id}', function ($id) {
+    $pengaduan = Pengaduan::with([
+        'user:id,name',
+        'desa:id,nama_desa',
+    ])->findOrFail($id);
+
+    $pengaduan->foto_url = $pengaduan->foto
+        ? asset('storage/' . $pengaduan->foto)
+        : null;
+
     return view('show', [
-        'id' => $id
+        'id' => $id,
+        'pengaduan' => $pengaduan,
     ]);
 })->name('laporan.show');
 

@@ -2,6 +2,14 @@
 
 @section('content')
 
+{{-- Leaflet CSS --}}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIINfQ3h8mW9nC7Wq7A6QeV9z1mG8fN5Y0M="
+    crossorigin=""
+>
+
 <style>
     :root {
         --detail-bg: #f6f8f3;
@@ -14,11 +22,9 @@
         --detail-green-dark: #087a48;
         --detail-green-soft: #def8e9;
         --detail-yellow: #f4cf70;
-        --detail-orange: #f2994a;
         --detail-blue: #2f80ed;
         --detail-red: #ef4444;
         --detail-shadow: 0 18px 48px rgba(18, 34, 25, 0.08);
-        --detail-shadow-hover: 0 24px 64px rgba(18, 34, 25, 0.13);
     }
 
     * {
@@ -159,7 +165,8 @@
 
     .detail-photo-card,
     .detail-info-card,
-    .detail-status-card {
+    .detail-status-card,
+    .detail-map-card {
         background: var(--detail-card);
         border: 1px solid var(--detail-line);
         border-radius: 34px;
@@ -257,7 +264,8 @@
 
     .detail-description h2,
     .detail-info-card h2,
-    .detail-status-card h2 {
+    .detail-status-card h2,
+    .detail-map-card h2 {
         margin: 0;
         color: var(--detail-dark);
         font-size: 22px;
@@ -280,7 +288,8 @@
     }
 
     .detail-info-card,
-    .detail-status-card {
+    .detail-status-card,
+    .detail-map-card {
         padding: 26px;
     }
 
@@ -329,6 +338,7 @@
         font-size: 14px;
         line-height: 1.45;
         font-weight: 850;
+        word-break: break-word;
     }
 
     .detail-status-card {
@@ -337,96 +347,120 @@
             #ffffff;
     }
 
+    .detail-status-box {
+        margin-top: 16px;
+        padding: 16px;
+        border-radius: 22px;
+        background: #f7faf6;
+        border: 1px solid rgba(16, 32, 24, 0.08);
+    }
+
+    .detail-status-current {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 0 13px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .detail-status-current.pending {
+        background: #fef3c7;
+        color: #7b4d08;
+    }
+
+    .detail-status-current.proses {
+        background: #e0f2fe;
+        color: #075985;
+    }
+
+    .detail-status-current.selesai {
+        background: #dcfce7;
+        color: #047857;
+    }
+
     .detail-status-card p {
-        margin: 10px 0 0;
+        margin: 12px 0 0;
         color: var(--detail-muted);
         font-size: 13px;
         line-height: 1.7;
         font-weight: 600;
     }
 
-    .detail-status-form {
-        margin-top: 20px;
-        display: grid;
-        gap: 14px;
+    .detail-map-wrap {
+        margin-top: 18px;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid rgba(16, 32, 24, 0.10);
+        background: #dfe9df;
     }
 
-    .detail-select-wrap {
-        position: relative;
-    }
-
-    .detail-select {
+    #detail-map {
         width: 100%;
-        height: 54px;
-        border: 1px solid rgba(16, 32, 24, 0.12);
-        outline: none;
-        border-radius: 18px;
-        background: #f8faf6;
-        color: var(--detail-dark);
-        padding: 0 44px 0 16px;
-        font-size: 14px;
-        font-weight: 750;
-        cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        transition: 0.22s ease;
+        height: 310px;
+        background: #dfe9df;
     }
 
-    .detail-select:focus {
-        background: #ffffff;
-        border-color: var(--detail-green);
-        box-shadow:
-            0 0 0 4px rgba(22, 167, 101, 0.12),
-            0 12px 24px rgba(18, 34, 25, 0.06);
-    }
-
-    .detail-select-arrow {
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #7c8a82;
-        font-size: 12px;
-        pointer-events: none;
-    }
-
-    .detail-update-btn {
-        width: 100%;
-        min-height: 54px;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        border-radius: 18px;
-        background: var(--detail-dark);
-        color: #ffffff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 9px;
+    .detail-map-empty {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: 20px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
         font-size: 13px;
-        font-weight: 950;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        box-shadow: 0 14px 30px rgba(16, 32, 24, 0.16);
-        transition: 0.24s ease;
-    }
-
-    .detail-update-btn:hover {
-        transform: translateY(-2px);
-        background: #1a2d22;
-    }
-
-    .detail-warning {
-        margin-top: 14px;
-        padding: 13px 14px;
-        border-radius: 17px;
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        color: #92400e;
-        font-size: 12px;
         line-height: 1.6;
-        font-weight: 700;
+        font-weight: 750;
+    }
+
+    .detail-coordinate-grid {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .detail-coordinate-box {
+        min-width: 0;
+        padding: 12px;
+        border-radius: 16px;
+        background: #f7faf6;
+        border: 1px solid rgba(16, 32, 24, 0.08);
+    }
+
+    .detail-coordinate-box span {
+        display: block;
+        color: var(--detail-muted);
+        font-size: 9px;
+        font-weight: 950;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .detail-coordinate-box strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--detail-dark);
+        font-size: 12px;
+        font-weight: 850;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .detail-map-marker {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: #ef4444;
+        border: 3px solid #ffffff;
+        box-shadow:
+            0 0 0 5px rgba(239, 68, 68, 0.20),
+            0 8px 18px rgba(16, 32, 24, 0.28);
     }
 
     @media (max-width: 980px) {
@@ -460,7 +494,8 @@
 
         .detail-photo-card,
         .detail-info-card,
-        .detail-status-card {
+        .detail-status-card,
+        .detail-map-card {
             border-radius: 26px;
         }
 
@@ -470,7 +505,8 @@
 
         .detail-description,
         .detail-info-card,
-        .detail-status-card {
+        .detail-status-card,
+        .detail-map-card {
             padding: 22px;
         }
 
@@ -498,6 +534,14 @@
             right: 14px;
             top: 14px;
         }
+
+        #detail-map {
+            height: 260px;
+        }
+
+        .detail-coordinate-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
@@ -517,6 +561,11 @@
     $fotoPath = $pengaduan->foto
         ? asset('storage/' . $pengaduan->foto)
         : 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1000';
+
+    $latitude = $pengaduan->latitude ?? null;
+    $longitude = $pengaduan->longitude ?? null;
+
+    $hasCoordinate = is_numeric($latitude) && is_numeric($longitude);
 @endphp
 
 <div class="detail-page">
@@ -531,8 +580,8 @@
                 </h1>
 
                 <p class="detail-subtitle">
-                    Halaman ini menampilkan bukti foto, deskripsi, lokasi, serta status terbaru
-                    dari laporan pengaduan masyarakat.
+                    Halaman ini menampilkan bukti foto, deskripsi, lokasi, titik peta,
+                    serta status terbaru dari laporan pengaduan masyarakat.
                 </p>
             </div>
 
@@ -567,7 +616,7 @@
 
             <aside class="detail-side">
                 <section class="detail-info-card">
-                    <h2>Informasi Lokasi</h2>
+                    <h2>Informasi Laporan</h2>
 
                     <div class="detail-info-list">
                         <div class="detail-info-item">
@@ -582,23 +631,34 @@
                         </div>
 
                         <div class="detail-info-item">
-                            <div class="detail-info-icon">📍</div>
+                            <div class="detail-info-icon">🧭</div>
 
                             <div>
-                                <span class="detail-info-label">RT / RW</span>
+                                <span class="detail-info-label">Lokasi Spesifik / Patokan</span>
                                 <span class="detail-info-value">
-                                    RT {{ optional($pengaduan->rtrw)->rt ?? '-' }} / RW {{ optional($pengaduan->rtrw)->rw ?? '-' }}
+                                    {{ $pengaduan->lokasi_spesifik ?: 'Lokasi spesifik belum tersedia' }}
                                 </span>
                             </div>
                         </div>
 
                         <div class="detail-info-item">
-                            <div class="detail-info-icon">🧭</div>
+                            <div class="detail-info-icon">👤</div>
 
                             <div>
-                                <span class="detail-info-label">Lokasi Spesifik</span>
+                                <span class="detail-info-label">Dibuat Oleh</span>
                                 <span class="detail-info-value">
-                                    {{ $pengaduan->lokasi_spesifik ?: 'Lokasi spesifik belum tersedia' }}
+                                    {{ optional($pengaduan->user)->name ?? 'Masyarakat' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="detail-info-item">
+                            <div class="detail-info-icon">🕒</div>
+
+                            <div>
+                                <span class="detail-info-label">Tanggal Laporan</span>
+                                <span class="detail-info-value">
+                                    {{ $pengaduan->created_at ? $pengaduan->created_at->format('d M Y, H:i') : '-' }}
                                 </span>
                             </div>
                         </div>
@@ -606,34 +666,45 @@
                 </section>
 
                 <section class="detail-status-card">
-                    <h2>Update Status</h2>
+                    <h2>Status Laporan</h2>
 
-                    <p>
-                        Ubah status laporan sesuai proses penanganan di lapangan.
-                    </p>
+                    <div class="detail-status-box">
+                        <span class="detail-status-current {{ $statusClass }}">
+                            ● {{ $statusLabel }}
+                        </span>
 
-                    <form action="{{ url('/api/admin/pengaduan/'.$pengaduan->id) }}" method="POST" class="detail-status-form">
-                        @csrf
-                        @method('PUT')
+                        <p>
+                            Status laporan hanya dapat diperbarui oleh admin atau petugas.
+                            Masyarakat dapat memantau perkembangan laporan melalui halaman ini.
+                        </p>
+                    </div>
+                </section>
 
-                        <div class="detail-select-wrap">
-                            <select name="status" class="detail-select">
-                                <option value="pending" {{ $pengaduan->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="proses" {{ $pengaduan->status == 'proses' ? 'selected' : '' }}>Proses</option>
-                                <option value="selesai" {{ $pengaduan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                            </select>
+                <section class="detail-map-card">
+                    <h2>Titik Lokasi Pengadu</h2>
 
-                            <span class="detail-select-arrow">▼</span>
+                    @if ($hasCoordinate)
+                        <div class="detail-map-wrap">
+                            <div id="detail-map"></div>
                         </div>
 
-                        <button type="submit" class="detail-update-btn">
-                            Update Status →
-                        </button>
-                    </form>
+                        <div class="detail-coordinate-grid">
+                            <div class="detail-coordinate-box">
+                                <span>Latitude</span>
+                                <strong>{{ number_format((float) $latitude, 7, '.', '') }}</strong>
+                            </div>
 
-                    <div class="detail-warning">
-                        Pastikan status hanya diubah setelah laporan benar-benar diverifikasi atau ditindaklanjuti.
-                    </div>
+                            <div class="detail-coordinate-box">
+                                <span>Longitude</span>
+                                <strong>{{ number_format((float) $longitude, 7, '.', '') }}</strong>
+                            </div>
+                        </div>
+                    @else
+                        <div class="detail-map-empty">
+                            Titik koordinat belum tersedia untuk laporan ini.
+                            Pastikan data latitude dan longitude tersimpan saat membuat pengaduan.
+                        </div>
+                    @endif
                 </section>
             </aside>
         </div>
@@ -642,3 +713,69 @@
 </div>
 
 @endsection
+
+@push('scripts')
+@if ($hasCoordinate)
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const latitude = Number(@json($latitude));
+        const longitude = Number(@json($longitude));
+
+        if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+            return;
+        }
+
+        const map = L.map('detail-map', {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView([latitude, longitude], 17);
+
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+                maxZoom: 19,
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }
+        ).addTo(map);
+
+        const customIcon = L.divIcon({
+            className: '',
+            html: '<div class="detail-map-marker"></div>',
+            iconSize: [18, 18],
+            iconAnchor: [9, 9]
+        });
+
+        L.marker([latitude, longitude], {
+            icon: customIcon
+        })
+        .addTo(map)
+        .bindPopup('Titik lokasi yang dipilih pengadu')
+        .openPopup();
+
+        L.circle([latitude, longitude], {
+            radius: 35,
+            color: '#ef4444',
+            weight: 2,
+            opacity: 0.45,
+            fillColor: '#ef4444',
+            fillOpacity: 0.12
+        }).addTo(map);
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 250);
+
+        setTimeout(function () {
+            map.invalidateSize();
+        }, 800);
+    });
+</script>
+@endif
+@endpush
