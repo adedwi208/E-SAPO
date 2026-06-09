@@ -1573,6 +1573,202 @@ SKELETON + EMPTY
     text-transform: uppercase;
 }
 
+
+
+/* ============================================================
+PERBAIKAN DASHBOARD MASYARAKAT
+============================================================ */
+.ep-title em::after {
+    display: none;
+}
+
+.ep-quick-main {
+    background: rgba(255,255,255,0.88);
+    color: var(--c-ink);
+}
+
+.ep-quick-main .ep-quick-icon {
+    background: var(--c-green-lt);
+    border-color: rgba(29,170,109,0.16);
+    color: var(--c-ink);
+}
+
+.ep-quick-main span {
+    color: var(--c-muted);
+}
+
+.ep-quick-main::after {
+    background: var(--c-green-soft);
+}
+
+.ep-report-panel {
+    margin-top: 22px;
+    padding: 22px;
+    border-radius: var(--r-xl);
+    background:
+        radial-gradient(circle at 96% 0%, rgba(29,170,109,0.12), transparent 34%),
+        rgba(255,255,255,0.90);
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-md);
+}
+
+.ep-report-panel-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+}
+
+.ep-report-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+}
+
+.ep-report-info-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 46px;
+    background: var(--c-green-lt);
+    border: 1px solid rgba(29,170,109,0.16);
+    color: var(--c-green-dk);
+    font-size: 20px;
+}
+
+.ep-report-info strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: var(--c-ink);
+    line-height: 1.3;
+}
+
+.ep-report-info p {
+    max-width: 640px;
+    margin-top: 6px;
+    color: var(--c-muted);
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.ep-report-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ep-search-box {
+    width: 320px;
+    height: 46px;
+    padding: 0 14px;
+    border-radius: 15px;
+    background: #ffffff;
+    border: 1px solid var(--c-line);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.22s ease;
+}
+
+.ep-search-box:focus-within {
+    border-color: rgba(29,170,109,0.38);
+    box-shadow: 0 0 0 4px rgba(29,170,109,0.10), var(--shadow-sm);
+}
+
+.ep-search-icon {
+    font-size: 15px;
+    flex-shrink: 0;
+    opacity: 0.78;
+}
+
+.ep-search-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--c-ink);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.ep-search-box input::placeholder {
+    color: var(--c-subtle);
+    font-weight: 600;
+}
+
+.ep-report-tags {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.ep-search-result-note {
+    display: none;
+    margin-top: 16px;
+    color: var(--c-muted);
+    font-size: 12.5px;
+    line-height: 1.6;
+    font-weight: 650;
+}
+
+.ep-search-result-note.show {
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .ep-report-panel-top {
+        grid-template-columns: 1fr;
+    }
+
+    .ep-report-actions {
+        justify-content: flex-start;
+    }
+
+    .ep-search-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 760px) {
+    .ep-report-panel {
+        padding: 18px;
+        border-radius: var(--r-lg);
+    }
+
+    .ep-report-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ep-report-actions .ep-toolbar-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ep-report-info {
+        gap: 12px;
+    }
+
+    .ep-report-info-icon {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        border-radius: 15px;
+    }
+}
+
 /* ============================================================
 ANIMATION + RESPONSIVE
 ============================================================ */
@@ -2172,23 +2368,48 @@ ANIMATION + RESPONSIVE
                 <span class="ep-kicker">Arsip Publik</span>
                 <h2 class="ep-section-title">Aduan Terbaru dari Masyarakat</h2>
             </div>
-
-            <p class="ep-section-note">
-                Setiap laporan ditampilkan sebagai dokumentasi publik untuk membantu
-                pemantauan kebersihan wilayah dan tindak lanjut yang lebih terarah.
-            </p>
         </div>
 
-        <div class="ep-toolbar">
-            <div class="ep-tags">
-                <span class="ep-tag">🌿 Realtime Data</span>
-                <span class="ep-tag">📷 Bukti Foto</span>
-                <span class="ep-tag">📌 Lokasi RT/RW</span>
+        <div class="ep-report-panel">
+            <div class="ep-report-panel-top">
+                <div class="ep-report-info">
+                    <div class="ep-report-info-icon">🗂️</div>
+
+                    <div>
+                        <strong>Dokumentasi laporan masyarakat yang masuk ke sistem</strong>
+                        <p>
+                            Setiap laporan ditampilkan sebagai arsip publik agar masyarakat bisa memantau
+                            kondisi wilayah. Cari aduan berdasarkan desa, lokasi, status, nama pelapor,
+                            atau isi deskripsi laporan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="ep-report-actions">
+                    <label class="ep-search-box" for="search-pengaduan">
+                        <span class="ep-search-icon">🔍</span>
+                        <input
+                            type="text"
+                            id="search-pengaduan"
+                            placeholder="Cari aduan, desa, status..."
+                            autocomplete="off"
+                        >
+                    </label>
+
+                    <a href="/create" class="ep-toolbar-btn">
+                        + Tambah Laporan
+                    </a>
+                </div>
             </div>
 
-            <a href="/create" class="ep-toolbar-btn">
-                + Tambah Laporan
-            </a>
+            <div class="ep-report-tags">
+                <span class="ep-tag">🌿 Realtime Data</span>
+                <span class="ep-tag">📷 Bukti Foto</span>
+                <span class="ep-tag">📌 Lokasi Laporan</span>
+                <span class="ep-tag">🔎 Bisa Dicari</span>
+            </div>
+
+            <div id="search-result-note" class="ep-search-result-note"></div>
         </div>
 
         <div id="container-pengaduan" class="ep-grid">
@@ -2213,6 +2434,10 @@ ANIMATION + RESPONSIVE
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('container-pengaduan');
+    const searchInput = document.getElementById('search-pengaduan');
+    const searchResultNote = document.getElementById('search-result-note');
+
+    let allPengaduan = [];
 
     const safeText = (v, fallback = '-') =>
         (v === null || v === undefined || v === '') ? fallback : String(v);
@@ -2242,60 +2467,110 @@ document.addEventListener('DOMContentLoaded', function () {
     const statusLabel = (s) =>
         s === 'proses' ? 'Proses' : s === 'selesai' ? 'Selesai' : 'Pending';
 
-    fetch('/api/pengaduan', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(async res => {
-        const data = await res.json();
-
-        if (!res.ok) {
-            throw data;
+    const getImageUrl = (item) => {
+        if (item.foto_url) {
+            return item.foto_url;
         }
 
-        return data;
-    })
-    .then(data => {
+        if (item.foto) {
+            return `/storage/${item.foto}`;
+        }
+
+        return 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900';
+    };
+
+    const getUserName = (item) => {
+        return item.user
+            ? safeText(item.user.name, 'Masyarakat')
+            : 'Masyarakat';
+    };
+
+    const getDesaName = (item) => {
+        return item.desa
+            ? safeText(item.desa.nama_desa || item.desa.name, 'Sektor Umum')
+            : 'Sektor Umum';
+    };
+
+    const getRtRwText = (item) => {
+        if (item.rtrw) {
+            const rt = safeText(item.rtrw.rt, '-');
+            const rw = safeText(item.rtrw.rw, '-');
+
+            return `RT ${rt}/RW ${rw}`;
+        }
+
+        return 'RT -/RW -';
+    };
+
+    const makeSearchText = (item) => {
+        const status = normalizeStatus(item.status);
+        const statusText = statusLabel(status);
+        const userName = getUserName(item);
+        const desaName = getDesaName(item);
+        const lokasi = safeText(item.lokasi_spesifik, '');
+        const deskripsi = safeText(item.deskripsi, '');
+        const rtRw = getRtRwText(item);
+
+        return [
+            status,
+            statusText,
+            userName,
+            desaName,
+            lokasi,
+            deskripsi,
+            rtRw
+        ].join(' ').toLowerCase();
+    };
+
+    const renderEmpty = () => {
+        container.innerHTML = `
+            <div class="ep-empty">
+                <div class="ep-empty-inner">
+                    <div class="ep-empty-icon">🍃</div>
+                    <h3>Belum Ada Laporan Masuk</h3>
+                    <p>
+                        Kondisi masih aman. Jika menemukan tumpukan sampah liar,
+                        segera buat laporan agar petugas dapat menindaklanjuti.
+                    </p>
+                    <a href="/create" class="ep-empty-cta">Buat Laporan Pertama →</a>
+                </div>
+            </div>
+        `;
+    };
+
+    const renderNoSearchResult = (keyword) => {
+        container.innerHTML = `
+            <div class="ep-empty">
+                <div class="ep-empty-inner">
+                    <div class="ep-empty-icon">🔎</div>
+                    <h3>Aduan Tidak Ditemukan</h3>
+                    <p>
+                        Tidak ada aduan yang cocok dengan kata kunci
+                        <strong>"${esc(keyword)}"</strong>. Coba cari berdasarkan desa,
+                        lokasi, status, nama pelapor, atau deskripsi laporan.
+                    </p>
+                </div>
+            </div>
+        `;
+    };
+
+    const renderCards = (data) => {
         container.innerHTML = '';
 
         if (!Array.isArray(data) || data.length === 0) {
-            container.innerHTML = `
-                <div class="ep-empty">
-                    <div class="ep-empty-inner">
-                        <div class="ep-empty-icon">🍃</div>
-                        <h3>Belum Ada Laporan Masuk</h3>
-                        <p>
-                            Kondisi masih aman. Jika menemukan tumpukan sampah liar,
-                            segera buat laporan agar petugas dapat menindaklanjuti.
-                        </p>
-                        <a href="/create" class="ep-empty-cta">Buat Laporan Pertama →</a>
-                    </div>
-                </div>
-            `;
+            renderEmpty();
             return;
         }
 
         data.forEach((item, idx) => {
             const status = normalizeStatus(item.status);
+            const imageUrl = getImageUrl(item);
 
-            const imageUrl = item.foto
-                ? `/storage/${item.foto}`
-                : 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900';
-
-            const userName = item.user
-                ? safeText(item.user.name, 'Masyarakat')
-                : 'Masyarakat';
-
+            const userName = getUserName(item);
             const initial = userName.charAt(0).toUpperCase();
 
-            const desaName = item.desa
-                ? safeText(item.desa.nama_desa || item.desa.name, 'Sektor Umum')
-                : 'Sektor Umum';
-
-            const rt = item.rtrw ? safeText(item.rtrw.rt) : '-';
-            const rw = item.rtrw ? safeText(item.rtrw.rw) : '-';
+            const desaName = getDesaName(item);
+            const rtRw = getRtRwText(item);
 
             const lokasi = safeText(item.lokasi_spesifik, 'Lokasi belum tersedia');
 
@@ -2316,7 +2591,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         <div class="ep-loc">
                             <span>📍</span>
-                            <span>${esc(desaName)} · RT ${esc(rt)}/RW ${esc(rw)}</span>
+                            <span>${esc(desaName)} · ${esc(rtRw)}</span>
                         </div>
                     </div>
 
@@ -2343,6 +2618,68 @@ document.addEventListener('DOMContentLoaded', function () {
 
             container.insertAdjacentHTML('beforeend', card);
         });
+    };
+
+    const filterPengaduan = () => {
+        const keyword = searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : '';
+
+        if (!keyword) {
+            if (searchResultNote) {
+                searchResultNote.classList.remove('show');
+                searchResultNote.textContent = '';
+            }
+
+            renderCards(allPengaduan);
+            return;
+        }
+
+        const filtered = allPengaduan.filter((item) => {
+            return makeSearchText(item).includes(keyword);
+        });
+
+        if (searchResultNote) {
+            searchResultNote.classList.add('show');
+            searchResultNote.textContent = `Menampilkan ${filtered.length} dari ${allPengaduan.length} aduan untuk pencarian "${searchInput.value.trim()}".`;
+        }
+
+        if (filtered.length === 0) {
+            renderNoSearchResult(searchInput.value.trim());
+            return;
+        }
+
+        renderCards(filtered);
+    };
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterPengaduan);
+    }
+
+    fetch('/api/pengaduan', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw data;
+        }
+
+        return data;
+    })
+    .then(data => {
+        allPengaduan = Array.isArray(data) ? data : [];
+
+        if (allPengaduan.length === 0) {
+            renderEmpty();
+            return;
+        }
+
+        renderCards(allPengaduan);
     })
     .catch(err => {
         console.error('Error:', err);

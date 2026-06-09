@@ -144,8 +144,7 @@
         pointer-events: none;
     }
 
-    .esapo-input-wrap input,
-    .esapo-input-wrap select {
+    .esapo-input-wrap input {
         width: 100%;
         height: 52px;
         border: 1px solid #e2e8f0;
@@ -159,39 +158,33 @@
         transition: 0.22s ease;
     }
 
-    .esapo-input-wrap select {
-        cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        padding-right: 44px;
-    }
-
-    .esapo-select-arrow {
-        position: absolute;
-        right: 16px;
-        color: #64748b;
-        font-size: 13px;
-        pointer-events: none;
-    }
-
     .esapo-input-wrap input::placeholder {
         color: #94a3b8;
     }
 
-    .esapo-input-wrap input:hover,
-    .esapo-input-wrap select:hover {
+    .esapo-input-wrap input:hover {
         border-color: #bbf7d0;
         background: #ffffff;
     }
 
-    .esapo-input-wrap input:focus,
-    .esapo-input-wrap select:focus {
+    .esapo-input-wrap input:focus {
         border-color: #10b981;
         background: #ffffff;
         box-shadow:
             0 0 0 4px rgba(16, 185, 129, 0.13),
             0 10px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .esapo-role-info {
+        margin-top: -2px;
+        padding: 13px 15px;
+        border-radius: 16px;
+        background: rgba(236, 253, 245, 0.9);
+        border: 1px solid rgba(167, 243, 208, 0.9);
+        color: #047857;
+        font-size: 13px;
+        line-height: 1.55;
+        font-weight: 650;
     }
 
     .esapo-register-btn {
@@ -221,6 +214,12 @@
         box-shadow:
             0 20px 40px rgba(16, 185, 129, 0.36),
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .esapo-register-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
     }
 
     .esapo-register-btn b {
@@ -356,8 +355,7 @@
             font-size: 13px;
         }
 
-        .esapo-input-wrap input,
-        .esapo-input-wrap select {
+        .esapo-input-wrap input {
             height: 49px;
             border-radius: 15px;
             font-size: 14px;
@@ -369,7 +367,8 @@
             font-size: 14.5px;
         }
 
-        .esapo-auth-note {
+        .esapo-auth-note,
+        .esapo-role-info {
             font-size: 12.8px;
             padding: 12px 13px;
         }
@@ -402,8 +401,7 @@
             font-size: 13px;
         }
 
-        .esapo-input-wrap input,
-        .esapo-input-wrap select {
+        .esapo-input-wrap input {
             height: 47px;
         }
 
@@ -425,8 +423,10 @@
         </div>
 
         <div class="esapo-header">
-            <h1>Buat Akun Baru</h1>
-            <p>Daftarkan diri Anda untuk mulai menggunakan layanan E-SAPO dan membantu lingkungan tetap bersih.</p>
+            <h1>Buat Akun Masyarakat</h1>
+            <p>
+                Daftarkan diri Anda untuk mulai mengirim laporan sampah liar dan membantu lingkungan tetap bersih.
+            </p>
         </div>
 
         <form id="form-register" class="esapo-form">
@@ -434,10 +434,10 @@
                 <label>Nama Lengkap</label>
                 <div class="esapo-input-wrap">
                     <span class="esapo-input-icon">👤</span>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        required 
+                    <input
+                        type="text"
+                        name="name"
+                        required
                         placeholder="Masukkan nama lengkap"
                     >
                 </div>
@@ -447,10 +447,10 @@
                 <label>Alamat Email</label>
                 <div class="esapo-input-wrap">
                     <span class="esapo-input-icon">✉</span>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        required 
+                    <input
+                        type="email"
+                        name="email"
+                        required
                         placeholder="nama@email.com"
                     >
                 </div>
@@ -460,29 +460,23 @@
                 <label>Password</label>
                 <div class="esapo-input-wrap">
                     <span class="esapo-input-icon">🔒</span>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        required 
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        minlength="8"
                         placeholder="Minimal 8 karakter"
                     >
                 </div>
             </div>
 
-            <div class="esapo-field">
-                <label>Daftar Sebagai</label>
-                <div class="esapo-input-wrap">
-                    <span class="esapo-input-icon">🛡️</span>
-                    <select name="role" required>
-                        <option value="masyarakat">Masyarakat Umum</option>
-                        <option value="admin">Petugas / Admin</option>
-                    </select>
-                    <span class="esapo-select-arrow">▼</span>
-                </div>
+            <div class="esapo-role-info">
+                Akun yang dibuat melalui halaman ini otomatis terdaftar sebagai <strong>masyarakat</strong>.
+                Setelah registrasi berhasil, silakan login terlebih dahulu.
             </div>
 
-            <button type="submit" class="esapo-register-btn">
-                <span>Daftar Sekarang</span>
+            <button type="submit" id="register-button" class="esapo-register-btn">
+                <span id="register-button-text">Daftar Sekarang</span>
                 <b>→</b>
             </button>
         </form>
@@ -510,11 +504,25 @@
 
 @push('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        sessionStorage.clear();
+        localStorage.clear();
+    });
+
     document.getElementById('form-register').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const formData = new FormData(this);
+        const form = this;
+        const button = document.getElementById('register-button');
+        const buttonText = document.getElementById('register-button-text');
+
+        button.disabled = true;
+        buttonText.textContent = 'Memproses...';
+
+        const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+
+        data.role = 'masyarakat';
 
         fetch('/api/register', {
             method: 'POST',
@@ -522,6 +530,7 @@
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
+            credentials: 'omit',
             body: JSON.stringify(data)
         })
         .then(async res => {
@@ -533,32 +542,26 @@
 
             return resData;
         })
-.then(resData => {
-    if (resData.access_token) {
-        const role = resData.role || resData.user.role;
-
-        localStorage.setItem('access_token', resData.access_token);
-        localStorage.setItem('user_role', role);
-        localStorage.setItem('user_name', resData.user.name);
-
-        alert('Registrasi Berhasil!');
-
-        if (role === 'admin') {
-            window.location.href = '/admin/dashboard';
-        } else if (role === 'masyarakat') {
-            window.location.href = '/';
-        } else {
-            alert('Role akun tidak dikenali.');
+        .then(resData => {
+            sessionStorage.clear();
             localStorage.clear();
-            window.location.href = '/login';
-        }
-    } else {
-        alert(resData.message || 'Registrasi gagal, periksa kembali data Anda.');
-    }
-})
+
+            alert(resData.message || 'Registrasi berhasil! Silakan login terlebih dahulu.');
+
+            window.location.replace("{{ route('login') }}");
+        })
         .catch(err => {
             console.error('Error:', err);
-            alert(err.message || 'Terjadi kesalahan pada sistem registrasi.');
+
+            if (err.errors) {
+                const firstError = Object.values(err.errors)[0][0];
+                alert(firstError);
+            } else {
+                alert(err.message || 'Terjadi kesalahan pada sistem registrasi.');
+            }
+
+            button.disabled = false;
+            buttonText.textContent = 'Daftar Sekarang';
         });
     });
 </script>

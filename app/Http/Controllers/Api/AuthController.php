@@ -13,25 +13,28 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
-            'role' => 'nullable|in:masyarakat,admin' // Opsional, default masyarakat jika kosong
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'masyarakat',
+
+            // Register publik cuma boleh masyarakat.
+            // Admin dibuat langsung dari database.
+            'role' => 'masyarakat',
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'message' => 'Registrasi berhasil',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
+            'message' => 'Registrasi berhasil. Silakan login terlebih dahulu.',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
         ], 201);
     }
 
@@ -45,7 +48,9 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Email atau password salah.'], 401);
+            return response()->json([
+                'message' => 'Email atau password salah.'
+            ], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -61,7 +66,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Berhasil logout']);
+        if ($request->user() && $request->user()->currentAccessToken()) {
+            $request->user()->currentAccessToken()->delete();
+        }
+
+        return response()->json([
+            'message' => 'Berhasil logout'
+        ]);
     }
 }
