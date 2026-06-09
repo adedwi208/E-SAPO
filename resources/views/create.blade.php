@@ -879,7 +879,7 @@
                             <div class="report-step-icon">1</div>
 
                             <div>
-                                <strong>Pilih wilayah lapora</strong>
+                                <strong>Pilih wilayah laporan</strong>
                                 <span>Tentukan desa atau kelurahan lokasi sampah liar.</span>
                             </div>
                         </div>
