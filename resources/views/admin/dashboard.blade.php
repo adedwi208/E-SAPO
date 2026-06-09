@@ -799,14 +799,19 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const token = sessionStorage.getItem('access_token');
-        const role = sessionStorage.getItem('user_role');
-        const userName = sessionStorage.getItem('user_name');
+        // Toleransi pembacaan key alternatif (juga cek jika key dibungkus tanpa user_)
+        const token = sessionStorage.getItem('access_token') || sessionStorage.getItem('token');
+        const rawRole = sessionStorage.getItem('user_role') || sessionStorage.getItem('role') || '';
+        const role = String(rawRole).trim().toLowerCase(); // Amankan ke string huruf kecil semua
+        const userName = sessionStorage.getItem('user_name') || sessionStorage.getItem('name');
 
         const clearSessionAndRedirect = function (message) {
             sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('token');
             sessionStorage.removeItem('user_role');
+            sessionStorage.removeItem('role');
             sessionStorage.removeItem('user_name');
+            sessionStorage.removeItem('name');
 
             if (message) {
                 alert(message);
@@ -815,13 +820,14 @@
             window.location.href = "{{ route('login') }}";
         };
 
+        // Kunci Validasi Utama Halaman Dashboard
         if (!token) {
             clearSessionAndRedirect('Silakan login terlebih dahulu.');
             return;
         }
 
         if (role !== 'admin') {
-            clearSessionAndRedirect('Akses ditolak. Halaman ini hanya untuk admin.');
+            clearSessionAndRedirect('Akses ditolak. Halaman ini hanya untuk admin. (Role terbaca: ' + (role || 'kosong') + ')');
             return;
         }
 
@@ -990,7 +996,7 @@
                         <td>
                             <a
                                 href="{{ route('admin.pengaduan.index') }}"
-                                class="admin-mini-link"
+                                class="admin-mini-link btn-kelola-nav"
                             >
                                 Kelola
                             </a>
@@ -999,6 +1005,26 @@
                 `;
             }).join('');
         };
+
+        // Interseptor Navigasi Pindah Halaman
+        document.body.addEventListener('click', function (e) {
+            const targetLink = e.target.closest('.admin-btn-primary, .admin-action-card, .admin-mini-link, .btn-kelola-nav');
+            
+            if (targetLink && targetLink.getAttribute('href') === "{{ route('admin.pengaduan.index') }}") {
+                e.preventDefault(); 
+
+                const currentToken = sessionStorage.getItem('access_token') || sessionStorage.getItem('token');
+                const currentRawRole = sessionStorage.getItem('user_role') || sessionStorage.getItem('role') || '';
+                const currentRole = String(currentRawRole).trim().toLowerCase();
+
+                if (!currentToken || currentRole !== 'admin') {
+                    clearSessionAndRedirect('Sesi Anda tidak valid. Silakan login kembali.');
+                    return;
+                }
+
+                window.location.href = "{{ route('admin.pengaduan.index') }}";
+            }
+        });
 
         fetch('/api/admin/pengaduan', {
             method: 'GET',

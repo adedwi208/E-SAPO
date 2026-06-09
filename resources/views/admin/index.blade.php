@@ -143,8 +143,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     animation: fadeUp 0.6s var(--ease-out) both;
 }
 
-.ap-header-left {}
-
 .ap-badge {
     display: inline-flex;
     align-items: center;
@@ -331,7 +329,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     animation: fadeUp 0.6s var(--ease-out) 0.16s both;
 }
 
-/* Search wrapper with icon */
 .ap-search-wrap {
     position: relative;
     flex: 1;
@@ -409,7 +406,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 .ap-refresh-btn:active { transform: translateY(0); }
 
-/* Result count badge */
 .ap-result-count {
     margin-left: auto;
     height: 36px;
@@ -437,7 +433,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     animation: fadeUp 0.6s var(--ease-out) 0.24s both;
 }
 
-/* ---- Card ---- */
 .ap-card {
     border-radius: var(--r-xl);
     overflow: hidden;
@@ -453,7 +448,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     box-shadow: var(--shadow-xl);
 }
 
-/* Image */
 .ap-card-img {
     position: relative;
     height: 200px;
@@ -474,7 +468,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     background: linear-gradient(180deg, transparent 30%, rgba(10,22,14,0.55) 100%);
 }
 
-/* Status pill */
 .ap-status {
     position: absolute;
     top: 12px; left: 12px;
@@ -514,7 +507,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 .ap-status-selesai::before { background: var(--c-teal); }
 
-/* Location chip */
 .ap-loc {
     position: absolute;
     left: 12px; right: 12px; bottom: 12px;
@@ -540,7 +532,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     min-width: 0;
 }
 
-/* Card body */
 .ap-card-body {
     padding: 20px;
     display: flex;
@@ -571,7 +562,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     overflow: hidden;
 }
 
-/* Reporter row */
 .ap-reporter {
     margin-top: 16px;
     padding-top: 16px;
@@ -593,7 +583,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     font-weight: 700;
     flex-shrink: 0;
 }
-.ap-reporter-info {}
 .ap-reporter-role {
     display: block;
     font-size: 9px;
@@ -615,7 +604,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     max-width: 160px;
 }
 
-/* Action zone */
 .ap-actions {
     margin-top: 16px;
     display: flex;
@@ -689,7 +677,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     box-shadow: 0 4px 12px rgba(224,53,53,0.14);
 }
 
-/* Locked / selesai state */
 .ap-select:disabled {
     background: #f0f4ee;
     color: var(--c-subtle);
@@ -706,7 +693,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     transform: none !important;
     pointer-events: none;
 }
-/* Selesai badge replacing the update button */
+
 .ap-done-badge {
     height: 42px;
     border-radius: var(--r-sm);
@@ -767,7 +754,6 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     color: var(--c-muted);
 }
 
-/* Loading spinner */
 .ap-loading {
     display: inline-flex;
     align-items: center;
@@ -786,7 +772,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ============================================================
-   TOAST NOTIFICATION (replaces alert())
+   TOAST NOTIFICATION
    ============================================================ */
 .ap-toast-wrap {
     position: fixed;
@@ -818,7 +804,7 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 }
 .ap-toast.success { background: #0a3320; border-left: 3px solid var(--c-green); }
 .ap-toast.error   { background: #3a0e0e; border-left: 3px solid var(--c-red); }
-.ap-toast.info    { background: #0d1e2e; border-left: 3px solid var(--c-blue); }
+.ap-toast.info     { background: #0d1e2e; border-left: 3px solid var(--c-blue); }
 .ap-toast-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 .ap-toast-dismiss {
     margin-left: auto;
@@ -975,12 +961,14 @@ html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const token = localStorage.getItem('access_token');
-    const role  = localStorage.getItem('user_role');
+    // SINKRONISASI SESSIONSTORAGE: Membaca token & role dari sessionStorage (sama seperti dashboard)
+    const token = sessionStorage.getItem('access_token') || sessionStorage.getItem('token');
+    const rawRole = sessionStorage.getItem('user_role') || sessionStorage.getItem('role') || '';
+    const role = String(rawRole).trim().toLowerCase();
 
     if (!token || role !== 'admin') {
         showToast('Akses ditolak. Halaman ini hanya untuk admin.', 'error');
-        setTimeout(() => window.location.href = '/login', 1800);
+        setTimeout(() => window.location.href = "{{ route('login') }}", 1800);
         return;
     }
 
@@ -1090,9 +1078,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         grid.innerHTML = filtered.map((item, idx) => {
             const status   = normalizeStatus(item.status);
-            const imageUrl = item.foto
-                ? `/storage/${item.foto}`
-                : 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900';
+            const imageUrl = item.foto_url 
+                ? item.foto_url 
+                : (item.foto ? `/storage/${item.foto}` : 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900');
             const userName = item.user ? safeText(item.user.name, 'Masyarakat') : 'Masyarakat';
             const initial  = userName.charAt(0).toUpperCase();
             const desaName = item.desa ? safeText(item.desa.nama_desa || item.desa.name, 'Sektor Umum') : 'Sektor Umum';
@@ -1157,7 +1145,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>`;
 
-        fetch('/api/pengaduan', {
+        // ENDPOINT FIX: Diganti ke endpoint admin agar hak akses Bearer Token terbaca valid oleh server
+        fetch('/api/admin/pengaduan', {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
         })
@@ -1203,7 +1192,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const status = select.value;
 
-        /* Disable tombol sementara saat request berlangsung */
         if (updateBtn) {
             updateBtn.disabled = true;
             updateBtn.textContent = 'Menyimpan...';
@@ -1224,7 +1212,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             showToast('Status pengaduan berhasil diubah.', 'success');
 
-            /* Kalau status selesai → langsung lock tanpa reload penuh */
             if (status === 'selesai') {
                 select.disabled = true;
                 if (updateBtn) {
@@ -1233,12 +1220,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     badge.innerHTML = '✅ Sudah Selesai';
                     updateBtn.replaceWith(badge);
                 }
-                /* Update data lokal agar summary sinkron */
                 const local = allPengaduan.find(i => String(i.id) === String(id));
                 if (local) local.status = 'selesai';
                 setSummary();
+                loadPengaduan();
             } else {
-                /* Status lain: update lokal + summary, kembalikan tombol */
                 const local = allPengaduan.find(i => String(i.id) === String(id));
                 if (local) local.status = status;
                 setSummary();
@@ -1246,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateBtn.disabled = false;
                     updateBtn.textContent = 'Simpan';
                 }
+                loadPengaduan();
             }
         })
         .catch(err => {
@@ -1254,7 +1241,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? Object.values(err.errors)[0][0]
                 : err?.message || 'Gagal mengubah status pengaduan.';
             showToast(msg, 'error');
-            /* Kembalikan tombol ke normal kalau gagal */
             if (updateBtn) {
                 updateBtn.disabled = false;
                 updateBtn.textContent = 'Simpan';
