@@ -317,7 +317,7 @@
             <nav class="admin-nav-menu">
                 <a href="{{ route('admin.dashboard') }}"
                    class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    🏠 Dashboard
+                    🏠 Dashboar
                 </a>
 
                 <a href="{{ route('admin.pengaduan.index') }}"
