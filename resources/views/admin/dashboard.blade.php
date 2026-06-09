@@ -451,7 +451,7 @@
     .admin-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 900px;
+        min-width: 1040px;
     }
 
     .admin-table th {
@@ -541,6 +541,49 @@
         justify-content: center;
         font-size: 11px;
         font-weight: 900;
+        white-space: nowrap;
+        transition: 0.22s ease;
+    }
+
+    .admin-photo-link:hover {
+        background: #c9f4dd;
+        transform: translateY(-1px);
+    }
+
+    .admin-map-link {
+        min-height: 34px;
+        padding: 0 11px;
+        border-radius: 11px;
+        background: #e0f2fe;
+        color: #075985;
+        border: 1px solid rgba(7, 89, 133, 0.12);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 900;
+        white-space: nowrap;
+        transition: 0.22s ease;
+    }
+
+    .admin-map-link:hover {
+        background: #bae6fd;
+        transform: translateY(-1px);
+    }
+
+    .admin-map-disabled {
+        min-height: 34px;
+        padding: 0 11px;
+        border-radius: 11px;
+        background: #f1f5f9;
+        color: #94a3b8;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 850;
         white-space: nowrap;
     }
 
@@ -772,6 +815,7 @@
                                 <th>Lokasi Detail</th>
                                 <th>Deskripsi</th>
                                 <th>Foto</th>
+                                <th>Peta</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -779,7 +823,7 @@
 
                         <tbody id="latest-body">
                             <tr>
-                                <td colspan="7" class="admin-empty">
+                                <td colspan="8" class="admin-empty">
                                     <span class="admin-loading">
                                         Memuat data laporan...
                                     </span>
@@ -799,10 +843,9 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Toleransi pembacaan key alternatif (juga cek jika key dibungkus tanpa user_)
         const token = sessionStorage.getItem('access_token') || sessionStorage.getItem('token');
         const rawRole = sessionStorage.getItem('user_role') || sessionStorage.getItem('role') || '';
-        const role = String(rawRole).trim().toLowerCase(); // Amankan ke string huruf kecil semua
+        const role = String(rawRole).trim().toLowerCase();
         const userName = sessionStorage.getItem('user_name') || sessionStorage.getItem('name');
 
         const clearSessionAndRedirect = function (message) {
@@ -820,7 +863,6 @@
             window.location.href = "{{ route('login') }}";
         };
 
-        // Kunci Validasi Utama Halaman Dashboard
         if (!token) {
             clearSessionAndRedirect('Silakan login terlebih dahulu.');
             return;
@@ -922,11 +964,15 @@
             statSelesai.innerText = selesai;
         };
 
+        const makeGoogleMapUrl = function (latitude, longitude) {
+            return `https://www.google.com/maps?q=${encodeURIComponent(latitude)},${encodeURIComponent(longitude)}`;
+        };
+
         const renderLatest = function (data) {
             if (!Array.isArray(data) || data.length === 0) {
                 latestBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="admin-empty">
+                        <td colspan="8" class="admin-empty">
                             Belum ada laporan masuk.
                         </td>
                     </tr>
@@ -979,6 +1025,35 @@
                     `
                     : '-';
 
+                const latitude = item.latitude;
+                const longitude = item.longitude;
+
+                const hasMap =
+                    latitude !== null &&
+                    latitude !== undefined &&
+                    latitude !== '' &&
+                    longitude !== null &&
+                    longitude !== undefined &&
+                    longitude !== '';
+
+                const mapHtml = hasMap
+                    ? `
+                        <a
+                            href="${makeGoogleMapUrl(latitude, longitude)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="admin-map-link"
+                            title="Buka lokasi laporan di Google Maps"
+                        >
+                            📍 Buka Map
+                        </a>
+                    `
+                    : `
+                        <span class="admin-map-disabled">
+                            Tidak ada map
+                        </span>
+                    `;
+
                 return `
                     <tr>
                         <td>${escapeHtml(pelapor)}</td>
@@ -986,6 +1061,7 @@
                         <td>${escapeHtml(lokasi)}</td>
                         <td>${escapeHtml(deskripsi)}</td>
                         <td>${fotoHtml}</td>
+                        <td>${mapHtml}</td>
 
                         <td>
                             <span class="admin-status ${status}">
@@ -1006,12 +1082,11 @@
             }).join('');
         };
 
-        // Interseptor Navigasi Pindah Halaman
         document.body.addEventListener('click', function (e) {
             const targetLink = e.target.closest('.admin-btn-primary, .admin-action-card, .admin-mini-link, .btn-kelola-nav');
-            
+
             if (targetLink && targetLink.getAttribute('href') === "{{ route('admin.pengaduan.index') }}") {
-                e.preventDefault(); 
+                e.preventDefault();
 
                 const currentToken = sessionStorage.getItem('access_token') || sessionStorage.getItem('token');
                 const currentRawRole = sessionStorage.getItem('user_role') || sessionStorage.getItem('role') || '';
@@ -1069,7 +1144,7 @@
 
                 latestBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="admin-empty">
+                        <td colspan="8" class="admin-empty">
                             Respons API pengaduan tidak valid.
                         </td>
                     </tr>
@@ -1088,7 +1163,7 @@
 
             latestBody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="admin-empty">
+                    <td colspan="8" class="admin-empty">
                         ${escapeHtml(
                             error.message ||
                             'Gagal memuat data laporan.'
