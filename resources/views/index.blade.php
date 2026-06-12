@@ -1974,9 +1974,9 @@ ANIMATION + RESPONSIVE
                     </h1>
 
                     <p class="ep-desc">
-                        E-SAPO membantu masyarakat mengirim aduan sampah liar dengan alur yang jelas,
-                        data lokasi yang rapi, bukti foto lapangan, dan arsip laporan yang mudah dipantau
-                        oleh warga maupun petugas.
+                        E-SAPO membantu masyarakat mengirim aduan sampah liar dengan titik lokasi map yang lebih akurat.
+                        Warga dapat menentukan posisi masalah melalui peta interaktif, menambahkan patokan lokasi,
+                        mengunggah foto lapangan, dan memantau laporan yang sudah masuk.
                     </p>
 
                     <div class="ep-actions">
@@ -2072,15 +2072,15 @@ ANIMATION + RESPONSIVE
 
                     <p class="ep-about-desc">
                         Website ini menjadi ruang pelaporan masyarakat agar informasi mengenai tumpukan sampah,
-                        lokasi bermasalah, dan kondisi lingkungan dapat tersampaikan dengan lebih rapi.
-                        Setiap laporan yang masuk menjadi data awal untuk membantu proses pemantauan
-                        dan tindak lanjut oleh pihak terkait.
+                        lokasi bermasalah, dan kondisi lingkungan dapat tersampaikan dengan lebih akurat.
+                        Dengan fitur titik lokasi map, warga dapat menandai posisi aduan secara spesifik
+                        sehingga petugas bisa melihat lokasi laporan langsung melalui peta.
                     </p>
 
                     <div class="ep-about-points">
                         <div class="ep-about-point">
                             <strong>Data Lebih Rapi</strong>
-                            <p>Laporan tersimpan berdasarkan lokasi, pelapor, deskripsi, dan status.</p>
+                            <p>Laporan tersimpan berdasarkan desa, titik map, patokan lokasi, deskripsi, foto, dan status.</p>
                         </div>
 
                         <div class="ep-about-point">
@@ -2090,7 +2090,7 @@ ANIMATION + RESPONSIVE
 
                         <div class="ep-about-point">
                             <strong>Lebih Terarah</strong>
-                            <p>Informasi laporan membantu proses pengecekan menjadi lebih jelas.</p>
+                            <p>Titik map membantu petugas menemukan lokasi aduan tanpa harus menebak titik masalah.</p>
                         </div>
                     </div>
                 </div>
@@ -2106,8 +2106,8 @@ ANIMATION + RESPONSIVE
                     <div class="ep-flow-item">
                         <div class="ep-flow-number">01</div>
                         <div class="ep-flow-text">
-                            <strong>Buat Laporan</strong>
-                            <span>Isi lokasi, RT/RW, deskripsi masalah, dan bukti foto lapangan.</span>
+                            <strong>Tentukan Titik Lokasi</strong>
+                            <span>Pilih desa, tandai titik lokasi pada map, isi patokan, deskripsi masalah, dan bukti foto lapangan.</span>
                         </div>
                     </div>
 
@@ -2122,8 +2122,8 @@ ANIMATION + RESPONSIVE
                     <div class="ep-flow-item">
                         <div class="ep-flow-number">03</div>
                         <div class="ep-flow-text">
-                            <strong>Dipantau Petugas</strong>
-                            <span>Data laporan membantu petugas melihat titik masalah yang perlu dicek.</span>
+                            <strong>Dicek Lewat Titik Lokasi</strong>
+                            <span>Petugas dapat melihat koordinat dan titik map agar pengecekan lokasi lebih tepat.</span>
                         </div>
                     </div>
 
@@ -2152,8 +2152,8 @@ ANIMATION + RESPONSIVE
                 <div class="ep-commit-icon">🧭</div>
                 <strong>Informasi Jelas</strong>
                 <p>
-                    Data lokasi dan deskripsi laporan dibuat terstruktur agar proses pengecekan
-                    tidak membingungkan.
+                    Titik map, patokan lokasi, dan deskripsi laporan dibuat terstruktur agar petugas
+                    lebih mudah menemukan lokasi aduan.
                 </p>
             </div>
 
@@ -2222,8 +2222,8 @@ ANIMATION + RESPONSIVE
             </div>
 
             <p class="ep-section-note">
-                Laporan yang jelas membantu petugas memahami kondisi lapangan tanpa harus menebak lokasi,
-                bukti, atau tingkat masalahnya.
+                Laporan yang jelas membantu petugas memahami kondisi lapangan lewat titik map,
+                patokan lokasi, bukti foto, dan deskripsi masalah yang lengkap.
             </p>
         </div>
 
@@ -2237,8 +2237,8 @@ ANIMATION + RESPONSIVE
                     </h3>
 
                     <p class="ep-banner-desc">
-                        Pastikan lokasi, RT/RW, foto, dan deskripsi masalah ditulis dengan jelas.
-                        Semakin lengkap data yang dikirim, semakin mudah laporan dibaca dan dipantau.
+                        Pastikan titik lokasi map, patokan lokasi, foto, dan deskripsi masalah diisi dengan jelas.
+                        Semakin akurat titik yang dikirim, semakin mudah laporan ditemukan, dibaca, dan dipantau.
                     </p>
 
                     <div class="ep-banner-actions">
@@ -2254,8 +2254,8 @@ ANIMATION + RESPONSIVE
                     </div>
 
                     <div>
-                        <strong>Lokasi</strong>
-                        <span>Tulis titik yang mudah dicari</span>
+                        <strong>Map</strong>
+                        <span>Tandai titik lokasi yang tepat</span>
                     </div>
 
                     <div>
@@ -2280,8 +2280,8 @@ ANIMATION + RESPONSIVE
                         <div class="ep-guide-icon">📍</div>
                         <span class="ep-guide-badge">Lokasi</span>
                     </div>
-                    <strong>Tulis Lokasi Spesifik</strong>
-                    <p>Tambahkan patokan seperti dekat warung, gang, jembatan, atau fasilitas umum.</p>
+                    <strong>Pilih Titik Lokasi yang Tepat</strong>
+                    <p>Tentukan titik aduan melalui map, lalu tambahkan patokan seperti dekat warung, gang, jembatan, atau fasilitas umum.</p>
                 </div>
 
                 <div class="ep-guide-card">
@@ -2299,7 +2299,7 @@ ANIMATION + RESPONSIVE
                         <span class="ep-guide-badge">Cek Lagi</span>
                     </div>
                     <strong>Periksa Sebelum Kirim</strong>
-                    <p>Pastikan data lokasi, RT/RW, dan foto sudah sesuai sebelum laporan dikirim.</p>
+                    <p>Pastikan titik map, patokan lokasi, dan foto sudah sesuai sebelum laporan dikirim.</p>
                 </div>
             </div>
         </div>
@@ -2332,7 +2332,7 @@ ANIMATION + RESPONSIVE
                     <details>
                         <summary>Apa saja data yang sebaiknya diisi?</summary>
                         <p>
-                            Isi lokasi spesifik, desa, RT/RW, deskripsi masalah, dan foto bukti lapangan
+                            Isi desa, titik lokasi map, patokan lokasi, deskripsi masalah, dan foto bukti lapangan
                             agar laporan lebih mudah dipahami.
                         </p>
                     </details>
@@ -2379,7 +2379,7 @@ ANIMATION + RESPONSIVE
                         <strong>Dokumentasi laporan masyarakat yang masuk ke sistem</strong>
                         <p>
                             Setiap laporan ditampilkan sebagai arsip publik agar masyarakat bisa memantau
-                            kondisi wilayah. Cari aduan berdasarkan desa, lokasi, status, nama pelapor,
+                            kondisi wilayah. Cari aduan berdasarkan desa, patokan lokasi, status, nama pelapor,
                             atau isi deskripsi laporan.
                         </p>
                     </div>
@@ -2391,7 +2391,7 @@ ANIMATION + RESPONSIVE
                         <input
                             type="text"
                             id="search-pengaduan"
-                            placeholder="Cari aduan, desa, status..."
+                            placeholder="Cari aduan, desa, lokasi, status..."
                             autocomplete="off"
                         >
                     </label>
@@ -2700,3 +2700,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+    
